@@ -1,10 +1,10 @@
 # 2223I_OOP_Bomberman
 
 # Thành viên
-* Trần Đức Anh:
-* Nguyễn Lê Hải Châu: 
+* Trần Đức Anh: https://github.com/trananh91
+* Nguyễn Lê Hải Châu: https://github.com/Chaucanhcut
 
-# Mô tả về các đối tượng trong trò chơi:
+# Mô tả về các đối tượng trong trò chơi
 Nếu bạn đã từng chơi Bomberman, bạn sẽ cảm thấy quen thuộc với những đối tượng này. Chúng được được chia làm hai loại chính là nhóm đối tượng động (__Bomber__, __Enemy__, __Bomb__) và nhóm đối tượng tĩnh (__Grass__, __Wall__, __Brick__, __Door__, __Item__).
 
  * _Bomber_ là nhân vật chính của trò chơi. _Bomber_ có thể di chuyển theo 4 hướng trái/phải/lên/xuống theo sự điều khiển của người chơi.
