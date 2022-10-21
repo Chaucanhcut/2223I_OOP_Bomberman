@@ -27,6 +27,8 @@ import java.util.Scanner;
 
 public class BombermanGame extends Application {
 
+    private boolean isOver = false;
+
 //    public static final int WIDTH = 20;
 //    public static final int HEIGHT = 15;
 //
@@ -44,22 +46,8 @@ public class BombermanGame extends Application {
     public void start(Stage stage) {
 
         /** Test game management.*/
-        GameManagement management = new GameManagement();
-        stage = management.getStage();
-
-//        // Tao Canvas
-//        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-//        gc = canvas.getGraphicsContext2D();
-//
-//        // Tao root container
-//        Group root = new Group();
-//        root.getChildren().add(canvas);
-//
-//        // Tao scene
-//        Scene scene = new Scene(root);
-//
-//        // Them scene vao stage
-//        stage.setScene(scene);
+        GameManagement game = new GameManagement();
+        stage = game.getStage();
 
         /** Test Event Key Press. */
 //        ArrayList<String> KeyInput = new ArrayList<String>();
@@ -97,48 +85,5 @@ public class BombermanGame extends Application {
 
         /** ham default.*/
         stage.show();
-
-//        AnimationTimer timer = new AnimationTimer() {
-//            @Override
-//            public void handle(long l) {
-//                render();
-//                update();
-//            }
-//        };
-//        timer.start();
-//
-//        createMap();
-//
-//        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-//        entities.add(bomberman);
-//    }
-
-//    public void createMap() {
-//        for (int i = 0; i < WIDTH; i++) {
-//            for (int j = 0; j < HEIGHT; j++) {
-//                Entity object;
-//                if (j == 1 && (i == 7 || i == 8 || i == 10)) {
-//                    object = new Wall(i,j, Sprite.wall.getFxImage());
-//                }
-//                else if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-//                    object = new Wall(i, j, Sprite.wall.getFxImage());
-//                }
-//                else {
-//                    object = new Grass(i, j, Sprite.grass.getFxImage());
-//                }
-//                stillObjects.add(object);
-//            }
-//        }
-//    }
-//
-//    public void update() {
-//        entities.forEach(Entity::update);
-//    }
-//
-//    public void render() {
-//        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//        stillObjects.forEach(g -> g.render(gc));
-//        entities.forEach(g -> g.render(gc));
-//    }
     }
 }

@@ -227,7 +227,7 @@ public class Sprite {
 		if(calc < diff * 2) {
 			return x1;
 		}
-			
+
 		return x2;
 	}
 	

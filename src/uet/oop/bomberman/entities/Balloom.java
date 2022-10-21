@@ -2,18 +2,13 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
 
-public class Balloom extends Entity {
+public class Balloom extends MovableEntities {
     public Balloom(int x, int y, Image img) {
         super(x, y, img);
     }
 
     @Override
-    public void update() {
-        x += 2;
-    }
-
-    @Override
-    public void checkCollide(Entity entity) {
+    public void CheckImagineMove(Entity e) {
 
     }
 }

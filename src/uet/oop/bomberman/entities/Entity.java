@@ -7,6 +7,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.awt.*;
+
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;
@@ -14,11 +16,10 @@ public abstract class Entity {
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
 
+
+    protected Rectangle BoundingRect = new Rectangle(this.x, this.y, 32, 32);
+
     protected Image img;
-
-    protected boolean checkCollision = false;
-
-//    protected boolean ifCollide = false;
 
     public int getX() {
         return this.x;
@@ -28,15 +29,9 @@ public abstract class Entity {
         return this.y;
     }
 
-//    public  getInstanceOf() {
-//
-//    }
 
-    protected void ifCollide(Entity entity) {
-        if (Math.abs((this.getX()) - (entity.getX())) < 2 ) {
-            this.checkCollision = true;
-            return;
-        }
+    public Rectangle getBoundingRect() {
+        return this.BoundingRect;
     }
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
@@ -49,8 +44,6 @@ public abstract class Entity {
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
+
     public abstract void update();
-
-    public abstract void checkCollide(Entity entity);
-
 }
