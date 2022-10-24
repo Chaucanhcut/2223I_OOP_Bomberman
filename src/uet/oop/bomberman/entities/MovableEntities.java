@@ -13,7 +13,7 @@ public abstract class MovableEntities extends Entity {
 
     @Override
     public void update() {
-        updateRect();
+
     }
 
     public void updateRect() {

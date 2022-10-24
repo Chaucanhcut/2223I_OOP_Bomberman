@@ -11,7 +11,7 @@ public class ImmovableEntities extends Entity{
 
     public ImmovableEntities(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        this.BoundingRect = new Rectangle(this.x * Sprite.SCALED_SIZE, this.y * Sprite.SCALED_SIZE, 32, 32);
+        this.BoundingRect = new Rectangle(this.x, this.y, 32, 32);
     }
 
 

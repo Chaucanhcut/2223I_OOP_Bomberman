@@ -38,7 +38,7 @@ public class GameManagement {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
+    private List<MovableEntities> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
     private List<Entity> GrassOnly = new ArrayList<>();
@@ -127,14 +127,14 @@ public class GameManagement {
                         case '1': {
                             Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
                             GrassOnly.add(grassObject);
-                            Entity object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
+                            MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
                             entities.add(object);
                             break;
                         }
                         case '2': {
                             Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
                             GrassOnly.add(grassObject);
-                            Entity object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                            MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
                             entities.add(object);
                             break;
                         }
@@ -248,9 +248,26 @@ public class GameManagement {
 
 
     public void checkBomberCollision() {
-        for (int i = 0; i < entities.size(); i++) {
-            MainCharacter.CheckImagineMove(entities.get(i));
+        for (int i = 0; i < stillObjects.size(); i++) {
+//            System.out.println(stillObjects.get(0).getX() + " - " + stillObjects.get(0).getY());
+//            System.out.println(stillObjects.get(1).getX() + " - " + stillObjects.get(1).getY());
+//            System.out.println(stillObjects.get(31).getX() + " - " + stillObjects.get(31).getY());
+
+            MainCharacter.CheckImagineMove(stillObjects.get(i));
         }
     }
+
+//    public void checkEnemyCollision() {
+//        for (int i = 0; i < entities.size(); i++) {
+//            for (int j = 0; j < stillObjects.size(); j++) {
+//                entities.get(i).CheckImagineMove(stillObjects.get(j));
+//            }
+//        }
+
+//        for (int j = 0; j < stillObjects.size(); j++) {
+//            entities.get(0).CheckImagineMove(stillObjects.get(j));
+//        }
+//    }
+
 }
 
