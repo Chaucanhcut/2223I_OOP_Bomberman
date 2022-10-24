@@ -27,6 +27,8 @@ import java.util.Scanner;
 
 public class BombermanGame extends Application {
 
+    public static Stage stage;
+
     private boolean isOver = false;
 
 //    public static final int WIDTH = 20;
@@ -43,11 +45,21 @@ public class BombermanGame extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage mainStage) {
 
         /** Test game management.*/
         GameManagement game = new GameManagement();
-        stage = game.getStage();
+        mainStage = game.getStage();
+
+        stage = mainStage;
+        stage.setTitle("Bomberman game");
+
+        Image icon = new Image(new File("res/textures/Bomberman-icon.png").toURI().toString());
+        stage.getIcons().add(icon);
+        stage.setResizable(false);
+        /** ham default.*/
+        stage.show();
+
 
         /** Test Event Key Press. */
 //        ArrayList<String> KeyInput = new ArrayList<String>();
@@ -82,8 +94,5 @@ public class BombermanGame extends Application {
 //            }
 //        }
 
-
-        /** ham default.*/
-        stage.show();
     }
 }
