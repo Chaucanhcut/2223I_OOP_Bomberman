@@ -32,21 +32,19 @@ public class Bomber extends MovableEntities {
         if (isLeftPressed) {
             x -= 2;
         }
-        if (isRightPressed) {
+        else if (isRightPressed) {
             x += 2;
         }
-
-        if (isSpacePressed) {
+        else if (isSpacePressed) {
             Bombing();
         }
-
-        if (isUpPressed) {
+        else if (isUpPressed) {
             y -= 2;
         }
-
-        if (isDownPressed) {
+        else if (isDownPressed) {
             y += 2;
         }
+
         this.updateRect();
     }
 
@@ -71,12 +69,11 @@ public class Bomber extends MovableEntities {
         }
     }
 
-
     public void Bombing() {
-
+        Bomb bomb = new Bomb(this.getX(), this.getY(), Sprite.bomb.getFxImage());
     }
 
-  @Override
+    @Override
     public void render(GraphicsContext gc) {
         if (isRightPressed) {
             Sprite spriteNormal = Sprite.player_right;
@@ -104,4 +101,6 @@ public class Bomber extends MovableEntities {
       }
         gc.drawImage(img, x,y);
     }
+
+
 }

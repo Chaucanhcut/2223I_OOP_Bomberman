@@ -30,6 +30,10 @@ public class GameManagement {
     public static int WIDTH;
     public static int HEIGHT;
 
+    public char[][] mapMatrix;
+
+    public static Entity[][] EntityMatrix;
+
     private int level;
 
     private Stage stage;
@@ -43,6 +47,8 @@ public class GameManagement {
 
     private List<Entity> GrassOnly = new ArrayList<>();
 
+    private List<Bomb> Bombs = new ArrayList<>();
+
     private Bomber MainCharacter;
 
     public static boolean isLeftPressed = false;
@@ -54,6 +60,8 @@ public class GameManagement {
     public static boolean isDownPressed = false;
 
     public static boolean isEvent = false;
+
+    private boolean isEscaped = false;
 
     public static int timeStart = 0;
 
@@ -84,6 +92,9 @@ public class GameManagement {
             public void handle(long l) {
                 render();
                 update();
+                if (isEscaped) {
+                    stage.close();
+                }
             }
         };
         timer.start();
@@ -95,69 +106,78 @@ public class GameManagement {
 
     /** Hàm để lấy 3 số trong file, lần lượt là level - height (số cột) - width (số hàng). File level1_test.txt là tách từ file level ra nhưng chỉ lấy đoạn map. */
     public void setProperties() {
-        try (Scanner scanner = new Scanner(new File("res/levels/Level1.txt"))) {
-            level = scanner.nextInt();
-            HEIGHT = scanner.nextInt();
-            WIDTH = scanner.nextInt();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File("res/levels/Level1.txt"));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        level = scanner.nextInt();
+        HEIGHT = scanner.nextInt();
+        WIDTH = scanner.nextInt();
+        scanner.nextLine();
+
+        mapMatrix = new char[HEIGHT][WIDTH];
+        int i = 0;
+        while(scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            for (int j = 0; j < WIDTH; j++) {
+                mapMatrix[i][j] = line.charAt(j);
+            }
+            i++;
+        }
+
+        EntityMatrix = new Entity[HEIGHT][WIDTH];
+
     }
 
     /** Create map từ file. */
     private void createMap() {
-        try (Scanner scanner = new Scanner(new File("res/levels/Level1.txt"))) {
-            scanner.nextLine();
-
-            int i = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                for (int j = 0; j < WIDTH; j++) {
-                    switch (line.charAt(j)) {
-                        case '#': {
-                            Entity object = new Wall(j, i, Sprite.wall.getFxImage());
-                            stillObjects.add(object);
-                            break;
-                        }
-                        case '*': {
-                            Entity object = new Brick(j, i, Sprite.brick.getFxImage());
-                            stillObjects.add(object);
-                            break;
-                        }
-                        case '1': {
-                            Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                            GrassOnly.add(grassObject);
-                            MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
-                            entities.add(object);
-                            break;
-                        }
-                        case '2': {
-                            Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                            GrassOnly.add(grassObject);
-                            MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                            entities.add(object);
-                            break;
-                        }
-                        case 'p': {
-                            Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                            GrassOnly.add(grassObject);
-                            MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(),gc);
-                            break;
-                        }
-                        default: {
-                            Entity object = new Grass(j, i, Sprite.grass.getFxImage());
-                            GrassOnly.add(object);
-                            break;
-                        }
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                switch (mapMatrix[i][j]) {
+                    case '#': {
+                        Entity object = new Wall(j, i, Sprite.wall.getFxImage());
+                        stillObjects.add(object);
+                        EntityMatrix[i][j] = object;
+                        break;
+                    }
+                    case '*': {
+                        Entity object = new Brick(j, i, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        EntityMatrix[i][j] = object;
+                        break;
+                    }
+                    case '1': {
+                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(grassObject);
+                        MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
+                        entities.add(object);
+                        EntityMatrix[i][j] = object;
+                        break;
+                    }
+                    case '2': {
+                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(grassObject);
+                        MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                        entities.add(object);
+                        EntityMatrix[i][j] = object;
+                        break;
+                    }
+                    case 'p': {
+                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(grassObject);
+                        MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(), gc);
+                        break;
+                    }
+                    default: {
+                        Entity object = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(object);
+//                        EntityMatrix[i][j] = object;
+                        break;
                     }
                 }
-                i++;
             }
-            System.out.println(stillObjects.size());
-            System.out.println(entities.size());
-            System.out.println(GrassOnly.size());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -168,12 +188,14 @@ public class GameManagement {
         checkBomberCollision();
     }
 
+
     public void render () {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         GrassOnly.forEach(g -> g.render(gc));
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
+        Bombs.forEach(g -> g.render(gc));
     }
 
     /** Hàm nhận event từ Keyboard. */
@@ -192,9 +214,6 @@ public class GameManagement {
                     isEvent = true;
                     timeStart = (int)System.currentTimeMillis();
                 }
-                if (event.getCode() == KeyCode.SPACE) {
-                    isSpacePressed = true;
-                }
                 if (event.getCode() == KeyCode.UP) {
                     isUpPressed = true;
                     isEvent = true;
@@ -204,6 +223,13 @@ public class GameManagement {
                     isDownPressed = true;
                     isEvent = true;
                     timeStart = (int)System.currentTimeMillis();
+                }
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    isEscaped  = true;
+                }
+                if (event.getCode() == KeyCode.SPACE) {
+                    isSpacePressed = true;
+                    PlayerSetBomb();
                 }
             }
         });
@@ -240,7 +266,7 @@ public class GameManagement {
                     isEvent = false;
                 }
                 if (event.getCode() == KeyCode.SPACE) {
-                    isSpacePressed = false;
+                    isSpacePressed  = false;
                 }
             }
         });
@@ -249,25 +275,24 @@ public class GameManagement {
 
     public void checkBomberCollision() {
         for (int i = 0; i < stillObjects.size(); i++) {
-//            System.out.println(stillObjects.get(0).getX() + " - " + stillObjects.get(0).getY());
-//            System.out.println(stillObjects.get(1).getX() + " - " + stillObjects.get(1).getY());
-//            System.out.println(stillObjects.get(31).getX() + " - " + stillObjects.get(31).getY());
-
             MainCharacter.CheckImagineMove(stillObjects.get(i));
         }
     }
 
-//    public void checkEnemyCollision() {
-//        for (int i = 0; i < entities.size(); i++) {
-//            for (int j = 0; j < stillObjects.size(); j++) {
-//                entities.get(i).CheckImagineMove(stillObjects.get(j));
-//            }
-//        }
+    public void checkEnemyCollision() {
+        for (int i = 0; i < entities.size(); i++) {
+            for (int j = 0; j < stillObjects.size(); j++) {
+                entities.get(i).CheckImagineMove(stillObjects.get(j));
+            }
+        }
+    }
 
-//        for (int j = 0; j < stillObjects.size(); j++) {
-//            entities.get(0).CheckImagineMove(stillObjects.get(j));
-//        }
-//    }
+
+    public void PlayerSetBomb() {
+        Bomb b = new Bomb((int)(MainCharacter.getX()/32), (int)(MainCharacter.getY()/32), Sprite.bomb.getFxImage());
+        Bombs.add(b);
+    }
+
 
 }
 

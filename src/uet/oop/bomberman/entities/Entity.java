@@ -16,7 +16,6 @@ public abstract class Entity {
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
 
-
     protected Rectangle BoundingRect = new Rectangle(this.x, this.y, 32, 32);
 
     protected Image img;
@@ -45,5 +44,5 @@ public abstract class Entity {
         gc.drawImage(img, x, y);
     }
 
-    public abstract void update();
+    public void update(){};
 }

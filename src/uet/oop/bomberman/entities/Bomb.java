@@ -24,7 +24,9 @@ public class Bomb extends ImmovableEntities{
 
     @Override
     public void render(GraphicsContext gc) {
-
+//        this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, 2000, 500).getFxImage();
+        this.img = Sprite.bomb_exploded2.getFxImage();
         gc.drawImage(img, x, y);
     }
+
 }

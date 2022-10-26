@@ -14,6 +14,6 @@ public class Oneal extends MovableEntities {
 
     @Override
     public void CheckImagineMove(Entity e) {
-
+        x -= 2;
     }
 }
