@@ -8,11 +8,23 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.awt.*;
 
 import static uet.oop.bomberman.GameManagement.*;
+import static uet.oop.bomberman.GameManagement.bombMap;
+import static uet.oop.bomberman.GameManagement.mapMatrix;
+import static uet.oop.bomberman.GameManagement.Bombs;
+import static uet.oop.bomberman.GameManagement.activeObjects;
+
+import static uet.oop.bomberman.entities.Flame.powerFlames;
+
+import uet.oop.bomberman.entities.Flame;
+import uet.oop.bomberman.entities.Bomb;
+
+
 import static uet.oop.bomberman.graphics.Sprite.movingSprite;
 
 public class Bomber extends MovableEntities {
     private GraphicsContext gc;
-
+    public int bombCount; // so luong bomb co the dat
+    public int bombTime = 150;
     public Bomber(int x, int y, Image img, GraphicsContext gc) {
         super( x, y, img);
         this.gc = gc;
@@ -26,6 +38,12 @@ public class Bomber extends MovableEntities {
         this.y = Y;
     }
 
+    @Override
+    public boolean canMove(int x, int y) {
+        //if (wallPass) return true;
+        boolean b = mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '*' && mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '#';
+        return b;
+    }
 
     @Override
     public void update() {
@@ -69,8 +87,36 @@ public class Bomber extends MovableEntities {
         }
     }
 
+  // public void Bombing() {
+  //     Bomb bomb = new Bomb(this.getX(), this.getY(), Sprite.bomb.getFxImage());
+  // }
+
     public void Bombing() {
-        Bomb bomb = new Bomb(this.getX(), this.getY(), Sprite.bomb.getFxImage());
+        int count = bombCount;
+        if (count > 1 && bombTime <=0) count = 1;
+        if (mapMatrix[getYMap()][getXMap()] != '*' && mapMatrix[getYMap()][getXMap()] != '#') {
+            bombMap[getYMap()][getXMap()] = '@'; // vị trí đặt bomb
+            // BombermanGame.bombSound.play(true, 0);
+            count--;
+            //activeObjects.add(new Bomb(getXMap() , getYMap(), Sprite.bomb.getFxImage()));
+            Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
+        }
+        else return;
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+        int xUnit, yUnit;
+        for (int i = 0; i < 4; i++) {
+            if (count == 0) break;
+            xUnit = getXMap() + dx[i];
+            yUnit = getYMap() + dy[i];
+            if (mapMatrix[yUnit][xUnit] != '*' && mapMatrix[yUnit][xUnit] != '#') {
+                bombMap[yUnit][xUnit] = '@'; // vị trí đặt bomb
+                count--;
+                //activeObjects.add(new Bomb(xUnit, yUnit, Sprite.bomb.getFxImage()));
+                Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
+            }
+        }
+        bombTime--;
     }
 
     @Override

@@ -15,8 +15,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.stillEntity.Grass;
+import uet.oop.bomberman.entities.stillEntity.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.File;

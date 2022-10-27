@@ -28,6 +28,30 @@ public abstract class Entity {
         return this.y;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    // Lấy tọa độ x trên map
+    public int getXMap() {
+        return x / Sprite.SCALED_SIZE;
+    }
+
+    // Lấy tọa độ y trên map
+    public int getYMap() {
+        return y / Sprite.SCALED_SIZE;
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
+    }
 
     public Rectangle getBoundingRect() {
         return this.BoundingRect;

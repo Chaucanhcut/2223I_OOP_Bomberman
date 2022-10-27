@@ -16,6 +16,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.stillEntity.Grass;
+import uet.oop.bomberman.entities.stillEntity.Wall;
+import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.*;
@@ -25,12 +28,11 @@ import java.util.Scanner;
 
 import uet.oop.bomberman.*;
 
-
 public class GameManagement {
-    public static int WIDTH;
-    public static int HEIGHT;
+    public static int WIDTH = 31;
+    public static int HEIGHT = 13;
 
-    public char[][] mapMatrix;
+    public static char[][] mapMatrix;
 
     public static Entity[][] EntityMatrix;
 
@@ -47,7 +49,11 @@ public class GameManagement {
 
     private List<Entity> GrassOnly = new ArrayList<>();
 
-    private List<Bomb> Bombs = new ArrayList<>();
+    //tao 1 mang 2 chieu luu vi tri dat bomb
+    public static char[][] bombMap = new char[HEIGHT][WIDTH];
+    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+    public static List<activeEntity> activeObjects = new ArrayList<>();
+    public static List<Bomb> Bombs = new ArrayList<>();
 
     private Bomber MainCharacter;
 
@@ -185,6 +191,7 @@ public class GameManagement {
         keyListener();
         entities.forEach(Entity::update);
         MainCharacter.update();
+        Bombs.forEach(Bomb::update);
         checkBomberCollision();
     }
 
@@ -229,7 +236,7 @@ public class GameManagement {
                 }
                 if (event.getCode() == KeyCode.SPACE) {
                     isSpacePressed = true;
-                    PlayerSetBomb();
+                    MainCharacter.Bombing();
                 }
             }
         });
@@ -286,13 +293,4 @@ public class GameManagement {
             }
         }
     }
-
-
-    public void PlayerSetBomb() {
-        Bomb b = new Bomb((int)(MainCharacter.getX()/32), (int)(MainCharacter.getY()/32), Sprite.bomb.getFxImage());
-        Bombs.add(b);
-    }
-
-
 }
-

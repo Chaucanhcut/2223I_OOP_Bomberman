@@ -5,7 +5,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.*;
 
-public class ImmovableEntities extends Entity{
+public class ImmovableEntities extends activeEntity{
 
     public boolean isRendered = true;
 
