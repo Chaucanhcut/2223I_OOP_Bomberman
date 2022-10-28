@@ -15,8 +15,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.stillEntity.Grass;
-import uet.oop.bomberman.entities.stillEntity.Wall;
+//import uet.oop.bomberman.entities.stillEntity.Grass;
+//import uet.oop.bomberman.entities.stillEntity.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.File;
@@ -30,14 +30,6 @@ public class BombermanGame extends Application {
     public static Stage stage;
 
     private boolean isOver = false;
-
-//    public static final int WIDTH = 20;
-//    public static final int HEIGHT = 15;
-//
-//    private GraphicsContext gc;
-//    private Canvas canvas;
-//    private List<Entity> entities = new ArrayList<>();
-//    private List<Entity> stillObjects = new ArrayList<>();
 
 
     public static void main(String[] args) {

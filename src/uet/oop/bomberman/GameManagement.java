@@ -1,23 +1,17 @@
 package uet.oop.bomberman;
 
-import com.sun.javafx.scene.shape.RectangleHelper;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.stillEntity.Grass;
-import uet.oop.bomberman.entities.stillEntity.Wall;
+//import uet.oop.bomberman.entities.stillEntity.Grass;
+//import uet.oop.bomberman.entities.stillEntity.Wall;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -25,8 +19,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import uet.oop.bomberman.*;
 
 public class GameManagement {
     public static int WIDTH = 31;
@@ -51,8 +43,9 @@ public class GameManagement {
 
     //tao 1 mang 2 chieu luu vi tri dat bomb
     public static char[][] bombMap = new char[HEIGHT][WIDTH];
+
     // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
-    public static List<activeEntity> activeObjects = new ArrayList<>();
+    public static List<ActiveEntity> activeObjects = new ArrayList<>();
     public static List<Bomb> Bombs = new ArrayList<>();
 
     private Bomber MainCharacter;
@@ -64,14 +57,6 @@ public class GameManagement {
     public static boolean isUpPressed = false;
 
     public static boolean isDownPressed = false;
-
-    public static boolean isEvent = false;
-
-    private boolean isEscaped = false;
-
-    public static int timeStart = 0;
-
-    public static int timeStop = 0;
 
 
     public GameManagement() {
@@ -98,9 +83,6 @@ public class GameManagement {
             public void handle(long l) {
                 render();
                 update();
-                if (isEscaped) {
-                    stage.close();
-                }
             }
         };
         timer.start();
@@ -114,7 +96,7 @@ public class GameManagement {
     public void setProperties() {
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("res/levels/Level1.txt"));
+            scanner = new Scanner(new File("res/levels/testLevel.txt"));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -179,7 +161,6 @@ public class GameManagement {
                     default: {
                         Entity object = new Grass(j, i, Sprite.grass.getFxImage());
                         GrassOnly.add(object);
-//                        EntityMatrix[i][j] = object;
                         break;
                     }
                 }
@@ -189,10 +170,11 @@ public class GameManagement {
 
     public void update () {
         keyListener();
-        entities.forEach(Entity::update);
+        entities.forEach(MovableEntities::update);
         MainCharacter.update();
         Bombs.forEach(Bomb::update);
         checkBomberCollision();
+        activeObjects.forEach(ActiveEntity::update);
     }
 
 
@@ -203,6 +185,7 @@ public class GameManagement {
         entities.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
         Bombs.forEach(g -> g.render(gc));
+        activeObjects.forEach(g->g.render(gc));
     }
 
     /** Hàm nhận event từ Keyboard. */
@@ -213,26 +196,18 @@ public class GameManagement {
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) {
                     isLeftPressed = true;
-                    isEvent = true;
-                    timeStart = (int)System.currentTimeMillis();
                 }
                 if (event.getCode() == KeyCode.RIGHT) {
                     isRightPressed = true;
-                    isEvent = true;
-                    timeStart = (int)System.currentTimeMillis();
                 }
                 if (event.getCode() == KeyCode.UP) {
                     isUpPressed = true;
-                    isEvent = true;
-                    timeStart = (int)System.currentTimeMillis();
                 }
                 if (event.getCode() == KeyCode.DOWN) {
                     isDownPressed = true;
-                    isEvent = true;
-                    timeStart = (int)System.currentTimeMillis();
                 }
                 if (event.getCode() == KeyCode.ESCAPE) {
-                    isEscaped  = true;
+                    stage.close();
                 }
                 if (event.getCode() == KeyCode.SPACE) {
                     isSpacePressed = true;
@@ -246,31 +221,15 @@ public class GameManagement {
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) {
                     isLeftPressed = false;
-                    if (isEvent) {
-                        timeStop = (int)System.currentTimeMillis();
-                    }
-                    isEvent = false;
                 }
                 if (event.getCode() == KeyCode.RIGHT) {
-                    if (isEvent) {
-                        timeStop = (int)System.currentTimeMillis();
-                    }
-                    isEvent = false;
                     isRightPressed = false;
                 }
                 if (event.getCode() == KeyCode.UP) {
                     isUpPressed = false;
-                    if (isEvent) {
-                        timeStop = (int)System.currentTimeMillis();
-                    }
-                    isEvent = false;
                 }
                 if (event.getCode() == KeyCode.DOWN) {
                     isDownPressed = false;
-                    if (isEvent) {
-                        timeStop = (int)System.currentTimeMillis();
-                    }
-                    isEvent = false;
                 }
                 if (event.getCode() == KeyCode.SPACE) {
                     isSpacePressed  = false;

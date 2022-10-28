@@ -3,14 +3,14 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.entities.stillEntity.Wall;
+//import uet.oop.bomberman.entities.stillEntity.Wall;
 
 import java.awt.*;
 
 import static uet.oop.bomberman.GameManagement.*;
 import static uet.oop.bomberman.graphics.Sprite.movingSprite;
 
-public class Balloom extends MovableEntities {
+public class Balloom extends Enemy {
 
     private boolean moveRight = false;
 
@@ -30,26 +30,27 @@ public class Balloom extends MovableEntities {
 
     @Override
     public void update() {
-//        int rand = (int)(Math.random()*4) + 1;
-//        if (rand == 1) {
-//            x += 2;
-//        }
-//        if (rand == 2) {
-//            x -= 2;
-//        }
-//        if (rand == 3) {
-//            y += 2;
-//        }
-//        if (rand == 4) {
-//            y -= 2;
+
+//        if (canMove()) {
+//            updateRight();
 //        }
 
-//        if(canMove()) {
-//            x += 2;
-//            System.out.println(l);
-//            l++;
-//        }
-        this.updateRect();
+
+        int rand = (int)(Math.random()*4) + 1;
+        if (rand == 1) {
+            if (!canMove()) {
+
+            }
+        }
+        if (rand == 2) {
+
+        }
+        if (rand == 3) {
+
+        }
+        if (rand == 4) {
+
+        }
     }
 
     @Override
@@ -112,8 +113,8 @@ public class Balloom extends MovableEntities {
     }
 
     public boolean canMove(){
-        int xMap = (this.getX()/32) ;
-        int yMap = (this.getY()/32) ;
+        int xMap = this.getXMap() ;
+        int yMap = this.getYMap() ;
         if(xMap<=0) xMap = 1;
         if(yMap<=0) yMap = 1;
         Entity other = null;
@@ -154,22 +155,22 @@ public class Balloom extends MovableEntities {
 
     @Override
     public void render(GraphicsContext gc) {
+        animate++;
         if (moveRight) {
             Sprite spriteNormal = Sprite.balloom_right1;
             Sprite sprite1 = Sprite.balloom_right2;
             Sprite sprite2 = Sprite.balloom_right3;
-            this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+            this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
         }
         else if (moveLeft) {
             Sprite spriteNormal = Sprite.balloom_left1;
             Sprite sprite1 = Sprite.balloom_left2;
             Sprite sprite2 = Sprite.balloom_left3;
-            this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+            this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
         }
         else {
             this.img = Sprite.balloom_right1.getFxImage();
         }
         gc.drawImage(img, x,y);
     }
-
 }

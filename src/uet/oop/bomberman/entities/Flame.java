@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.GameManagement;
 import uet.oop.bomberman.graphics.Sprite;
@@ -62,6 +63,15 @@ public class Flame extends ImmovableEntities {
         }
     }
 
+    @Override
+    public void render(GraphicsContext gc) {
+        for (int i = 0; i < flameList.size(); i++) {
+            gc.drawImage(flameList.get(i).getImg(),flameList.get(i).getXMap(), flameList.get(i).getYMap());
+        }
+
+//        gc.drawImage(img, x, y);
+    }
+
     /**
      * Cho flame xuất hiện theo hướng direction.
      */
@@ -116,7 +126,7 @@ public class Flame extends ImmovableEntities {
      * @param entity đối tượng va chạm với flame
      */
     @Override
-    public void collide(activeEntity entity) {
+    public void collide(ActiveEntity entity) {
         // Nếu flame chưa kích hoạt || entity chết
         // hoặc va chạm với flame khác || powerup thì ko làm gì cả
         //if (!active || !entity.active || entity instanceof Flame || entity instanceof Item) {

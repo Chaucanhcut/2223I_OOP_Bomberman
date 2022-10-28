@@ -1,10 +1,7 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.*;
@@ -16,7 +13,7 @@ public abstract class Entity {
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
 
-    protected Rectangle BoundingRect = new Rectangle(this.x, this.y, 32, 32);
+    protected Rectangle BoundingRect;
 
     protected Image img;
 
@@ -35,6 +32,7 @@ public abstract class Entity {
     public void setY(int y) {
         this.y = y;
     }
+
     // Lấy tọa độ x trên map
     public int getXMap() {
         return x / Sprite.SCALED_SIZE;
@@ -53,9 +51,7 @@ public abstract class Entity {
         this.img = img;
     }
 
-    public Rectangle getBoundingRect() {
-        return this.BoundingRect;
-    }
+    public abstract Rectangle getBoundingRect();
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
     public Entity( int xUnit, int yUnit, Image img) {
@@ -67,6 +63,4 @@ public abstract class Entity {
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
-
-    public void update(){};
 }

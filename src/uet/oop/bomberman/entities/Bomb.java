@@ -15,9 +15,8 @@ public class Bomb extends ImmovableEntities{
 
     private boolean isBombed  = false;
 
-  // public Bomb(int x, int y, Image img) {
-  //     super( x, y, img);
-  // }
+    private Flame flame;
+
 
     /**ham bomb co tham so powerFlame de luu do dai cua flame. */
     public Bomb(int x, int y, Image img, int powerFlames) {
@@ -37,8 +36,11 @@ public class Bomb extends ImmovableEntities{
         } else { // Nổ rồi thì cho hiện flame
             if (!added) {
                 // Tạo flame
-                Flame flame = new Flame(getXMap(), getYMap(), 1, false, Sprite.explosion_vertical.getFxImage());
+                this.flame = new Flame(getXMap(), getYMap(), 1, false, Sprite.explosion_vertical.getFxImage());
                 flame.createFlame();
+//                for (int i = 0; i < flame.flameList.size(); i++) {
+//                    flame.flameList.get(i).update();
+//                }
                 GameManagement.activeObjects.addAll(flame.flameList);
                 added = true;
             }
@@ -47,6 +49,7 @@ public class Bomb extends ImmovableEntities{
                 delete = true;
                 active = false;
                 GameManagement.bombMap[getYMap()][getXMap()] = ' ';
+                System.out.println(GameManagement.Bombs.size());
             }
             // Animation bom nổ
             setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 20).getFxImage());
@@ -54,13 +57,9 @@ public class Bomb extends ImmovableEntities{
         }
     }
 
-    public void setImage() {
-
-    }
-
     @Override
     public void render(GraphicsContext gc) {
-        this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, 2000, 500).getFxImage();
+//        this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, 2000, 500).getFxImage();
         //this.img = Sprite.bomb_exploded2.getFxImage();
         gc.drawImage(img, x, y);
     }

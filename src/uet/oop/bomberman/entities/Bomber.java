@@ -11,17 +11,19 @@ import static uet.oop.bomberman.GameManagement.*;
 import static uet.oop.bomberman.GameManagement.bombMap;
 import static uet.oop.bomberman.GameManagement.mapMatrix;
 import static uet.oop.bomberman.GameManagement.Bombs;
-import static uet.oop.bomberman.GameManagement.activeObjects;
 
 import static uet.oop.bomberman.entities.Flame.powerFlames;
-
-import uet.oop.bomberman.entities.Flame;
-import uet.oop.bomberman.entities.Bomb;
 
 
 import static uet.oop.bomberman.graphics.Sprite.movingSprite;
 
 public class Bomber extends MovableEntities {
+
+    private boolean isDead = false;
+
+    private int animate = 0;
+
+    private final int TIME = 30;
     private GraphicsContext gc;
     public int bombCount; // so luong bomb co the dat
     public int bombTime = 150;
@@ -30,40 +32,37 @@ public class Bomber extends MovableEntities {
         this.gc = gc;
     }
 
-    public void setX(int X) {
-        this.x = X;
-    }
-
-    public void setY(int Y) {
-        this.y = Y;
-    }
+//    @Override
+//    public boolean canMove(int x, int y) {
+//        //if (wallPass) return true;
+//        boolean b = mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '*' && mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '#';
+//        return b;
+//    }
 
     @Override
-    public boolean canMove(int x, int y) {
-        //if (wallPass) return true;
-        boolean b = mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '*' && mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '#';
-        return b;
+    public Rectangle getBoundingRect() {
+        return new Rectangle(this.getX(), this.getY() + 2, 20,28);
     }
 
     @Override
     public void update() {
-        if (isLeftPressed) {
-            x -= 2;
+        if (canMove()) {
+            if (isLeftPressed) {
+                x -= 2;
+            }
+            else if (isRightPressed) {
+                x += 2;
+            }
+            else if (isSpacePressed) {
+                Bombing();
+            }
+            else if (isUpPressed) {
+                y -= 2;
+            }
+            else if (isDownPressed) {
+                y += 2;
+            }
         }
-        else if (isRightPressed) {
-            x += 2;
-        }
-        else if (isSpacePressed) {
-            Bombing();
-        }
-        else if (isUpPressed) {
-            y -= 2;
-        }
-        else if (isDownPressed) {
-            y += 2;
-        }
-
-        this.updateRect();
     }
 
     @Override
@@ -87,9 +86,6 @@ public class Bomber extends MovableEntities {
         }
     }
 
-  // public void Bombing() {
-  //     Bomb bomb = new Bomb(this.getX(), this.getY(), Sprite.bomb.getFxImage());
-  // }
 
     public void Bombing() {
         int count = bombCount;
@@ -98,7 +94,6 @@ public class Bomber extends MovableEntities {
             bombMap[getYMap()][getXMap()] = '@'; // vị trí đặt bomb
             // BombermanGame.bombSound.play(true, 0);
             count--;
-            //activeObjects.add(new Bomb(getXMap() , getYMap(), Sprite.bomb.getFxImage()));
             Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
         }
         else return;
@@ -112,7 +107,6 @@ public class Bomber extends MovableEntities {
             if (mapMatrix[yUnit][xUnit] != '*' && mapMatrix[yUnit][xUnit] != '#') {
                 bombMap[yUnit][xUnit] = '@'; // vị trí đặt bomb
                 count--;
-                //activeObjects.add(new Bomb(xUnit, yUnit, Sprite.bomb.getFxImage()));
                 Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
             }
         }
@@ -121,31 +115,58 @@ public class Bomber extends MovableEntities {
 
     @Override
     public void render(GraphicsContext gc) {
+        animate++;
         if (isRightPressed) {
             Sprite spriteNormal = Sprite.player_right;
             Sprite sprite1 = Sprite.player_right_1;
             Sprite sprite2 = Sprite.player_right_2;
-            this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+            this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
         }
         if (isLeftPressed) {
             Sprite spriteNormal = Sprite.player_left;
             Sprite sprite1 = Sprite.player_left_1;
             Sprite sprite2 = Sprite.player_left_2;
-            this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+            this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
         }
        if (isUpPressed) {
            Sprite spriteNormal = Sprite.player_up;
            Sprite sprite1 = Sprite.player_up_1;
            Sprite sprite2 = Sprite.player_up_2;
-           this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+           this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
         }
       if (isDownPressed) {
           Sprite spriteNormal = Sprite.player_down;
           Sprite sprite1 = Sprite.player_down_1;
           Sprite sprite2 = Sprite.player_down_2;
-          this.img = movingSprite(spriteNormal, sprite1, sprite2, Math.abs(timeStart- timeStop), 300).getFxImage();
+          this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
       }
         gc.drawImage(img, x,y);
+    }
+
+    @Override
+    public boolean canMove() {
+        int xMap = this.getXMap() ;
+        int yMap = this.getYMap() ;
+        if(xMap<=0) xMap = 1;
+        if(yMap<=0) yMap = 1;
+        Entity other = null;
+        for(int i = xMap-1; i<= xMap+1; i++){
+            for(int j = yMap - 1; j<= yMap+1; j++){
+                if(EntityMatrix[j][i] != null) {
+                    other = EntityMatrix[j][i];
+                    if (this.getBoundingRect().intersects(other.getBoundingRect())) {
+                        if (other instanceof StillEntity) {
+                            return false;
+                        }
+                        if (other instanceof Enemy) {
+                            System.out.println("Die");
+                            isDead = true;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 
