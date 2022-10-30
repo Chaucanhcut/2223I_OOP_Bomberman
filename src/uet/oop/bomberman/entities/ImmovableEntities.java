@@ -8,15 +8,15 @@ public abstract class ImmovableEntities extends ActiveEntity {
 
     public ImmovableEntities(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        this.BoundingRect = new Rectangle(this.x, this.y, 32, 32);
+        this.BoundingRect = new Rectangle(this.getX(), this.getY(), 32, 32);
     }
 
-    @Override
-    public void update() {}
+    public abstract void update();
 
     @Override
     public Rectangle getBoundingRect() {
-        return new Rectangle(this.getXMap(), this.getYMap(), 32, 32);
+//        return new Rectangle(this.getXMap(), this.getYMap(), 32, 32);
+        return this.BoundingRect;
     }
 
 }

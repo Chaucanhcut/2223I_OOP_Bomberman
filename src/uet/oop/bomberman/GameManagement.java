@@ -76,7 +76,6 @@ public class GameManagement {
 
         /** Thêm scene vào stage. */
         stage.setScene(scene);
-        createMap();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -96,7 +95,8 @@ public class GameManagement {
     public void setProperties() {
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("res/levels/testLevel.txt"));
+//            scanner = new Scanner(new File("res/levels/testLevel.txt"));
+            scanner = new Scanner(new File("res/levels/Level1.txt"));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -114,9 +114,7 @@ public class GameManagement {
             }
             i++;
         }
-
         EntityMatrix = new Entity[HEIGHT][WIDTH];
-
     }
 
     /** Create map từ file. */
@@ -158,6 +156,14 @@ public class GameManagement {
                         MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(), gc);
                         break;
                     }
+                    case 'x': {
+                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(grassObject);
+                        Entity object = new Portal(j,i,Sprite.portal.getFxImage());
+                        stillObjects.add(object);
+                        EntityMatrix[i][j] = object;
+                        break;
+                    }
                     default: {
                         Entity object = new Grass(j, i, Sprite.grass.getFxImage());
                         GrassOnly.add(object);
@@ -165,6 +171,10 @@ public class GameManagement {
                     }
                 }
             }
+        }
+        for (int i = 0; i < entities.size(); i++) {
+            System.out.println(entities.get(i).getXMap());
+            System.out.println(entities.get(i).getYMap());
         }
     }
 
@@ -174,7 +184,28 @@ public class GameManagement {
         MainCharacter.update();
         Bombs.forEach(Bomb::update);
         checkBomberCollision();
-        activeObjects.forEach(ActiveEntity::update);
+//        activeObjects.forEach(ActiveEntity::update);
+
+        for (int i = 0; i < activeObjects.size(); i++) {
+            activeObjects.get(i).update();
+            for (ActiveEntity activeObject : activeObjects) {
+                activeObjects.get(i).collide(activeObject);
+            }
+        }
+
+        /**
+         * Game over.
+         */
+//        if (playerCount == 1 && !bomber1.active) {
+//            gameState = "gameOver";
+//            return;
+//        }
+
+        for (int i = 0; i < activeObjects.size(); i++) {
+            if (activeObjects.get(i).delete) {
+                activeObjects.remove(activeObjects.get(i));
+            }
+        }
     }
 
 
@@ -185,7 +216,15 @@ public class GameManagement {
         entities.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
         Bombs.forEach(g -> g.render(gc));
-        activeObjects.forEach(g->g.render(gc));
+//        activeObjects.forEach(g->g.render(gc));
+
+        for (ActiveEntity entity : activeObjects) {
+            if (!entity.delete) {
+//                powerUpSound.play(false, 0);
+                entity.render(gc);
+            }
+        }
+
     }
 
     /** Hàm nhận event từ Keyboard. */
@@ -243,13 +282,6 @@ public class GameManagement {
         for (int i = 0; i < stillObjects.size(); i++) {
             MainCharacter.CheckImagineMove(stillObjects.get(i));
         }
-    }
-
-    public void checkEnemyCollision() {
-        for (int i = 0; i < entities.size(); i++) {
-            for (int j = 0; j < stillObjects.size(); j++) {
-                entities.get(i).CheckImagineMove(stillObjects.get(j));
-            }
-        }
+        System.out.println("size: " + activeObjects.size());
     }
 }

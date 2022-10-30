@@ -13,8 +13,6 @@ public class Bomb extends ImmovableEntities{
     public static int timeExplode = 90;
     public boolean added = false;
 
-    private boolean isBombed  = false;
-
     private Flame flame;
 
 
@@ -24,7 +22,7 @@ public class Bomb extends ImmovableEntities{
         this.powerFlames = powerFlames;
         active = true;
         delete = false;
-        timeExplode = 90;
+        timeExplode = 450;
     }
 
     @Override
@@ -32,7 +30,7 @@ public class Bomb extends ImmovableEntities{
         if (timeExplode > 0) { // Chưa nổ thì cho hiện bomb
             System.out.println("sap no");
             timeExplode--;
-            setImg(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExplode, 20).getFxImage());
+            setImg(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExplode, 60).getFxImage());
         } else { // Nổ rồi thì cho hiện flame
             if (!added) {
                 // Tạo flame
@@ -49,10 +47,10 @@ public class Bomb extends ImmovableEntities{
                 delete = true;
                 active = false;
                 GameManagement.bombMap[getYMap()][getXMap()] = ' ';
-                System.out.println(GameManagement.Bombs.size());
+//                System.out.println("GBS: " + GameManagement.Bombs.size());
             }
             // Animation bom nổ
-            setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 20).getFxImage());
+            setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 30).getFxImage());
             //BombermanGame.bombSound.play(false, 0);
         }
     }

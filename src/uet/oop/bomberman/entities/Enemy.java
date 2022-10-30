@@ -15,13 +15,8 @@ public abstract class Enemy extends MovableEntities {
     }
 
     @Override
-    public void CheckImagineMove(Entity e) {
-
-    }
-
-    @Override
     public Rectangle getBoundingRect() {
-        return new Rectangle(this.getX(), this.getY(), 32, 32);
+        return new Rectangle(this.getX(), this.getY(), 30, 30);
     }
 
 //    @Override

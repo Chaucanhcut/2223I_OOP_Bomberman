@@ -30,14 +30,8 @@ public class Bomber extends MovableEntities {
     public Bomber(int x, int y, Image img, GraphicsContext gc) {
         super( x, y, img);
         this.gc = gc;
+        bombCount = 1;
     }
-
-//    @Override
-//    public boolean canMove(int x, int y) {
-//        //if (wallPass) return true;
-//        boolean b = mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '*' && mapMatrix[y / Sprite.SCALED_SIZE][x / Sprite.SCALED_SIZE] != '#';
-//        return b;
-//    }
 
     @Override
     public Rectangle getBoundingRect() {
@@ -46,26 +40,23 @@ public class Bomber extends MovableEntities {
 
     @Override
     public void update() {
-        if (canMove()) {
             if (isLeftPressed) {
-                x -= 2;
+                 x -= 2;
             }
             else if (isRightPressed) {
-                x += 2;
+                 x += 2;
             }
             else if (isSpacePressed) {
                 Bombing();
             }
             else if (isUpPressed) {
-                y -= 2;
+                 y -= 2;
             }
             else if (isDownPressed) {
-                y += 2;
+                 y += 2;
             }
-        }
     }
 
-    @Override
     public void CheckImagineMove(Entity e) {
         Rectangle TestRect = new Rectangle(this.getX(), this.getY() + 2, 20,28);
 
@@ -94,7 +85,7 @@ public class Bomber extends MovableEntities {
             bombMap[getYMap()][getXMap()] = '@'; // vị trí đặt bomb
             // BombermanGame.bombSound.play(true, 0);
             count--;
-            Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
+            activeObjects.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
         }
         else return;
         int[] dx = {1, -1, 0, 0};
@@ -107,7 +98,7 @@ public class Bomber extends MovableEntities {
             if (mapMatrix[yUnit][xUnit] != '*' && mapMatrix[yUnit][xUnit] != '#') {
                 bombMap[yUnit][xUnit] = '@'; // vị trí đặt bomb
                 count--;
-                Bombs.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
+                activeObjects.add(new Bomb((int)(getX()/32), (int)(getY()/32), Sprite.bomb.getFxImage(), powerFlames));
             }
         }
         bombTime--;
@@ -155,7 +146,7 @@ public class Bomber extends MovableEntities {
                 if(EntityMatrix[j][i] != null) {
                     other = EntityMatrix[j][i];
                     if (this.getBoundingRect().intersects(other.getBoundingRect())) {
-                        if (other instanceof StillEntity) {
+                        if (other instanceof Wall || other instanceof Brick) {
                             return false;
                         }
                         if (other instanceof Enemy) {
@@ -168,6 +159,4 @@ public class Bomber extends MovableEntities {
         }
         return true;
     }
-
-
 }

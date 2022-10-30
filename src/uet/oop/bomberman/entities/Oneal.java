@@ -12,10 +12,10 @@ public class Oneal extends Enemy {
 
     }
 
-    @Override
-    public void CheckImagineMove(Entity e) {
-        x -= 2;
-    }
+//    @Override
+//    public void CheckImagineMove(Entity e) {
+//        x -= 2;
+//    }
 
     @Override
     public boolean canMove() {

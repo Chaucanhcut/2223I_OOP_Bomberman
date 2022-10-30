@@ -17,7 +17,5 @@ public abstract class MovableEntities extends ActiveEntity {
         return true;
     }
 
-    public abstract void CheckImagineMove(Entity e);
-
     public abstract boolean canMove();
 }

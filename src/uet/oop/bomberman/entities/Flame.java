@@ -61,15 +61,12 @@ public class Flame extends ImmovableEntities {
                 }
             }
         }
+        System.out.println("Flame list: " + flameList.size());
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        for (int i = 0; i < flameList.size(); i++) {
-            gc.drawImage(flameList.get(i).getImg(),flameList.get(i).getXMap(), flameList.get(i).getYMap());
-        }
-
-//        gc.drawImage(img, x, y);
+        gc.drawImage(img, x, y);
     }
 
     /**
