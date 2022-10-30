@@ -74,7 +74,7 @@ public class Flame extends ImmovableEntities {
      */
     @Override
     public void update() {
-        animation = 20;
+        animation = 30;
 
         if (Bomb.timeExplode <= 0) {
             active = true; // Flame hoạt động

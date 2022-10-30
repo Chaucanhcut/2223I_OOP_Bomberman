@@ -36,7 +36,7 @@ public class GameManagement {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<MovableEntities> entities = new ArrayList<>();
+    private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
     private List<Entity> GrassOnly = new ArrayList<>();
@@ -125,12 +125,17 @@ public class GameManagement {
                     case '#': {
                         Entity object = new Wall(j, i, Sprite.wall.getFxImage());
                         stillObjects.add(object);
+//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
                     case '*': {
-                        Entity object = new Brick(j, i, Sprite.brick.getFxImage());
+                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
+                        GrassOnly.add(grassObject);
+                        ActiveEntity object = new Brick(j, i, Sprite.brick.getFxImage());
+                        activeObjects.add(object);
                         stillObjects.add(object);
+//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -138,7 +143,8 @@ public class GameManagement {
                         Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
                         GrassOnly.add(grassObject);
                         MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
-                        entities.add(object);
+                        activeObjects.add(object);
+//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -146,7 +152,8 @@ public class GameManagement {
                         Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
                         GrassOnly.add(grassObject);
                         MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                        entities.add(object);
+                        activeObjects.add(object);
+//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -154,6 +161,7 @@ public class GameManagement {
                         Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
                         GrassOnly.add(grassObject);
                         MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(), gc);
+//                        activeObjects.add(MainCharacter);
                         break;
                     }
                     case 'x': {
@@ -172,15 +180,15 @@ public class GameManagement {
                 }
             }
         }
-        for (int i = 0; i < entities.size(); i++) {
-            System.out.println(entities.get(i).getXMap());
-            System.out.println(entities.get(i).getYMap());
+        for (int i = 0; i < activeObjects.size(); i++) {
+            System.out.println(activeObjects.get(i));
         }
     }
 
     public void update () {
         keyListener();
-        entities.forEach(MovableEntities::update);
+//        scene.setOnKeyPressed(keyEvent -> MainCharacter.handleKeyEvent1(keyEvent));
+//        entities.forEach(MovableEntities::update);
         MainCharacter.update();
         Bombs.forEach(Bomb::update);
         checkBomberCollision();
@@ -206,6 +214,12 @@ public class GameManagement {
                 activeObjects.remove(activeObjects.get(i));
             }
         }
+
+        for (int i = 0; i < stillObjects.size(); i++) {
+            if (stillObjects.get(i) instanceof Brick && ((Brick) stillObjects.get(i)).delete) {
+                stillObjects.remove(stillObjects.get(i));
+            }
+        }
     }
 
 
@@ -213,10 +227,9 @@ public class GameManagement {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         GrassOnly.forEach(g -> g.render(gc));
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+//        entities.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
         Bombs.forEach(g -> g.render(gc));
-//        activeObjects.forEach(g->g.render(gc));
 
         for (ActiveEntity entity : activeObjects) {
             if (!entity.delete) {
@@ -282,6 +295,8 @@ public class GameManagement {
         for (int i = 0; i < stillObjects.size(); i++) {
             MainCharacter.CheckImagineMove(stillObjects.get(i));
         }
-        System.out.println("size: " + activeObjects.size());
+        for (int i = 0; i < activeObjects.size(); i++) {
+            MainCharacter.checkIfDead(activeObjects.get(i));
+        }
     }
 }
