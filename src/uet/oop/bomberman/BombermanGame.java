@@ -54,14 +54,13 @@ public class BombermanGame extends Application {
         stage = mainStage;
         stage.setTitle("Bomberman game");
 
-        //add 2246 311022------------
-//       sceneGameBoard = GameManagement.createSceneGameBoard();
-//       sceneGameOver = GameManagement.createSceneGameOver();
-//       sceneVictory = GameManagement.createSceneVictory();
+        //add 2246 311022------------ load cac scene: menu, game board, game over, victory 
+        sceneMenu = GameManagement.createSceneMenu();
+        stage.setScene(sceneMenu);
+        sceneGameBoard = GameManagement.createSceneGameBoard();
+        sceneGameOver = GameManagement.createSceneGameOver();
+        sceneVictory = GameManagement.createSceneVictory();
 
-        // 2 dong code tiep theo dung de load menu
-         sceneMenu = GameManagement.createSceneMenu();
-         stage.setScene(sceneMenu);
         //---------------------------
 
         Image icon = new Image(new File("res/textures/Bomberman-icon.png").toURI().toString());
