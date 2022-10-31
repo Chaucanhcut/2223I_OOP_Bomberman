@@ -10,8 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
-//import uet.oop.bomberman.entities.stillEntity.Grass;
-//import uet.oop.bomberman.entities.stillEntity.Wall;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -21,7 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GameManagement {
-    public static int WIDTH = 31;
+    private static int WIDTH = 31;
     public static int HEIGHT = 13;
 
     public static char[][] mapMatrix;
@@ -36,19 +34,18 @@ public class GameManagement {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
     private List<Entity> GrassOnly = new ArrayList<>();
 
     //tao 1 mang 2 chieu luu vi tri dat bomb
-    public static char[][] bombMap = new char[HEIGHT][WIDTH];
+    public static char[][] bombMap;
 
     // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
     public static List<ActiveEntity> activeObjects = new ArrayList<>();
     public static List<Bomb> Bombs = new ArrayList<>();
 
-    private Bomber MainCharacter;
+    private static Bomber MainCharacter;
 
     public static boolean isLeftPressed = false;
     public static boolean isRightPressed = false;
@@ -57,6 +54,44 @@ public class GameManagement {
     public static boolean isUpPressed = false;
 
     public static boolean isDownPressed = false;
+
+
+//    private int WIDTH = 31;
+//    private int HEIGHT = 13;
+//
+//    private static char[][] mapMatrix;
+//
+//    private static Entity[][] EntityMatrix;
+//
+//    //tao 1 mang 2 chieu luu vi tri dat bomb
+//    private static char[][] bombMap;
+//
+//    private int level;
+//
+//    private Stage stage;
+//
+//    private Group root;
+//    private Scene scene;
+//
+//    private GraphicsContext gc;
+//    private Canvas canvas;
+//    private List<Entity> stillObjects = new ArrayList<>();
+//
+//    private List<Entity> GrassOnly = new ArrayList<>();
+//
+//    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+//    private static List<ActiveEntity> activeObjects = new ArrayList<>();
+//    private static List<Bomb> Bombs = new ArrayList<>();
+//
+//    private static Bomber MainCharacter;
+//
+//    private static boolean isLeftPressed = false;
+//    private static boolean isRightPressed = false;
+//    private static boolean isSpacePressed = false;
+//
+//    private static boolean isUpPressed = false;
+//
+//    private static boolean isDownPressed = false;
 
 
     public GameManagement() {
@@ -95,7 +130,6 @@ public class GameManagement {
     public void setProperties() {
         Scanner scanner = null;
         try {
-//            scanner = new Scanner(new File("res/levels/testLevel.txt"));
             scanner = new Scanner(new File("res/levels/Level1.txt"));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -106,6 +140,7 @@ public class GameManagement {
         scanner.nextLine();
 
         mapMatrix = new char[HEIGHT][WIDTH];
+        bombMap = new char[HEIGHT][WIDTH];
         int i = 0;
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -114,7 +149,15 @@ public class GameManagement {
             }
             i++;
         }
+
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int k = 0; k < WIDTH; k++) {
+                bombMap[j][k] = ' ';
+            }
+        }
+
         EntityMatrix = new Entity[HEIGHT][WIDTH];
+
     }
 
     /** Create map từ file. */
@@ -125,7 +168,6 @@ public class GameManagement {
                     case '#': {
                         Entity object = new Wall(j, i, Sprite.wall.getFxImage());
                         stillObjects.add(object);
-//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -135,7 +177,6 @@ public class GameManagement {
                         ActiveEntity object = new Brick(j, i, Sprite.brick.getFxImage());
                         activeObjects.add(object);
                         stillObjects.add(object);
-//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -144,7 +185,6 @@ public class GameManagement {
                         GrassOnly.add(grassObject);
                         MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
                         activeObjects.add(object);
-//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -153,7 +193,6 @@ public class GameManagement {
                         GrassOnly.add(grassObject);
                         MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
                         activeObjects.add(object);
-//                        entities.add(object);
                         EntityMatrix[i][j] = object;
                         break;
                     }
@@ -180,19 +219,20 @@ public class GameManagement {
                 }
             }
         }
-        for (int i = 0; i < activeObjects.size(); i++) {
-            System.out.println(activeObjects.get(i));
-        }
+
+//        for (int i =0 ; i < HEIGHT; i++) {
+//            for (int j = 0; j <  WIDTH; j++) {
+//                System.out.print(mapMatrix[i][j]);
+//            }
+//            System.out.println();
+//        }
     }
 
     public void update () {
         keyListener();
-//        scene.setOnKeyPressed(keyEvent -> MainCharacter.handleKeyEvent1(keyEvent));
-//        entities.forEach(MovableEntities::update);
         MainCharacter.update();
         Bombs.forEach(Bomb::update);
         checkBomberCollision();
-//        activeObjects.forEach(ActiveEntity::update);
 
         for (int i = 0; i < activeObjects.size(); i++) {
             activeObjects.get(i).update();
@@ -224,6 +264,14 @@ public class GameManagement {
 
 
     public void render () {
+//        System.out.println("BombMap:");
+//        for (int i = 0; i < HEIGHT; i++) {
+//            for (int j = 0; j < WIDTH; j++) {
+//                System.out.print(bombMap[i][j]);
+//            }
+//            System.out.println();
+//        }
+
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         GrassOnly.forEach(g -> g.render(gc));
         stillObjects.forEach(g -> g.render(gc));
@@ -237,7 +285,6 @@ public class GameManagement {
                 entity.render(gc);
             }
         }
-
     }
 
     /** Hàm nhận event từ Keyboard. */
@@ -299,4 +346,44 @@ public class GameManagement {
             MainCharacter.checkIfDead(activeObjects.get(i));
         }
     }
+
+    public static Bomber getBomber() {
+        return MainCharacter;
+    }
+
+//    public static char[][] getMapMatrix() {
+//        return mapMatrix;
+//    }
+//
+//    public Entity[][] getEntityMatrix() {
+//        return EntityMatrix;
+//    }
+//
+//    public char[][] getBombMap() {
+//        return bombMap;
+//    }
+//
+//    public List<ActiveEntity> getActiveObjects() {
+//        return activeObjects;
+//    }
+//
+//    public static boolean isLeftPressed() {
+//        return isLeftPressed;
+//    }
+//
+//    public static boolean isRightPressed() {
+//        return isRightPressed;
+//    }
+//
+//    public static boolean isSpacePressed() {
+//        return isSpacePressed;
+//    }
+//
+//    public static boolean isUpPressed() {
+//        return isUpPressed;
+//    }
+//
+//    public static boolean isDownPressed() {
+//        return isDownPressed;
+//    }
 }

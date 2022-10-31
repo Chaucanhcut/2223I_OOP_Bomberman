@@ -61,7 +61,6 @@ public class Flame extends ImmovableEntities {
                 }
             }
         }
-        System.out.println("Flame list: " + flameList.size());
     }
 
     @Override

@@ -16,6 +16,4 @@ public abstract class MovableEntities extends ActiveEntity {
     public boolean canMove(int x, int y) {
         return true;
     }
-
-    public abstract boolean canMove();
 }
