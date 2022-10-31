@@ -188,7 +188,8 @@ public class Bomber extends MovableEntities {
 
         if (GameManagement.getMapMatrix()[newY][getXMap()] != '*' && GameManagement.getMapMatrix()[newY][getXMap()] != '#') {
             GameManagement.getBombMap()[newY][getXMap()] = '@'; // vị trí đặt bomb
-            // BombermanGame.bombSound.play(true, 0);
+            //GameManagement.getBombMap()[getYMap()][getXMap()] = '@'; // vị trí đặt bomb
+            // GameManagement.bombSound.play(true, 0);
             count--;
             GameManagement.getActiveObjects().add(new Bomb(getXMap(), newY, Sprite.bomb.getFxImage(), powerFlames));
         } else return;

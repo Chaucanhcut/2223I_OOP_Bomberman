@@ -19,6 +19,7 @@ public class Sprite {
 	protected int _realWidth;
 	protected int _realHeight;
 	private SpriteSheet _sheet;
+	private Image image;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -286,5 +287,9 @@ public class Sprite {
 		}
 
 		return output;
+	}
+
+	public Image getImage() {
+		return image;
 	}
 }
