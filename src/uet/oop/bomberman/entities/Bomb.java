@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.GameManagement;
 import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.GameManagement.bombMap;
+//import static uet.oop.bomberman.GameManagement.bombMap;
 
 public class Bomb extends ImmovableEntities{
     protected int timeAfter = 30;
@@ -35,14 +35,14 @@ public class Bomb extends ImmovableEntities{
                 // Tạo flame
                 this.flame = new Flame(getXMap(), getYMap(), 1, false, Sprite.explosion_vertical.getFxImage());
                 flame.createFlame();
-                GameManagement.activeObjects.addAll(flame.flameList);
+                GameManagement.getActiveObjects().addAll(flame.flameList);
                 added = true;
             }
             timeAfter--; // Đếm ngược thời gian bom khi nổ
             if (timeAfter < 0) { // Nếu đã hết thời gian nổ
                 delete = true;
                 active = false;
-                GameManagement.bombMap[getYMap()][getXMap()] = ' ';
+                GameManagement.getBombMap()[getYMap()][getXMap()] = ' ';
             }
             // Animation bom nổ
             setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 200).getFxImage());

@@ -19,57 +19,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GameManagement {
-    private static int WIDTH = 31;
-    public static int HEIGHT = 13;
-
-    public static char[][] mapMatrix;
-
-    public static Entity[][] EntityMatrix;
-
-    private int level;
-
-    private Stage stage;
-    private Group root;
-    private Scene scene;
-
-    private GraphicsContext gc;
-    private Canvas canvas;
-    private List<Entity> stillObjects = new ArrayList<>();
-
-    private List<Entity> GrassOnly = new ArrayList<>();
-
-    //tao 1 mang 2 chieu luu vi tri dat bomb
-    public static char[][] bombMap;
-
-    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
-    public static List<ActiveEntity> activeObjects = new ArrayList<>();
-    public static List<Bomb> Bombs = new ArrayList<>();
-
-    private static Bomber MainCharacter;
-
-    public static boolean isLeftPressed = false;
-    public static boolean isRightPressed = false;
-    public static boolean isSpacePressed = false;
-
-    public static boolean isUpPressed = false;
-
-    public static boolean isDownPressed = false;
-
-
-//    private int WIDTH = 31;
-//    private int HEIGHT = 13;
+//    private static int WIDTH = 31;
+//    public static int HEIGHT = 13;
 //
-//    private static char[][] mapMatrix;
+//    public static char[][] mapMatrix;
 //
-//    private static Entity[][] EntityMatrix;
-//
-//    //tao 1 mang 2 chieu luu vi tri dat bomb
-//    private static char[][] bombMap;
+//    public static Entity[][] EntityMatrix;
 //
 //    private int level;
 //
 //    private Stage stage;
-//
 //    private Group root;
 //    private Scene scene;
 //
@@ -79,19 +38,60 @@ public class GameManagement {
 //
 //    private List<Entity> GrassOnly = new ArrayList<>();
 //
+//    //tao 1 mang 2 chieu luu vi tri dat bomb
+//    public static char[][] bombMap;
+//
 //    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
-//    private static List<ActiveEntity> activeObjects = new ArrayList<>();
-//    private static List<Bomb> Bombs = new ArrayList<>();
+//    public static List<ActiveEntity> activeObjects = new ArrayList<>();
+//    public static List<Bomb> Bombs = new ArrayList<>();
 //
 //    private static Bomber MainCharacter;
 //
-//    private static boolean isLeftPressed = false;
-//    private static boolean isRightPressed = false;
-//    private static boolean isSpacePressed = false;
+//    public static boolean isLeftPressed = false;
+//    public static boolean isRightPressed = false;
+//    public static boolean isSpacePressed = false;
 //
-//    private static boolean isUpPressed = false;
+//    public static boolean isUpPressed = false;
 //
-//    private static boolean isDownPressed = false;
+//    public static boolean isDownPressed = false;
+
+
+    private int WIDTH = 31;
+    private int HEIGHT = 13;
+
+    private static char[][] mapMatrix;
+
+    private static Entity[][] EntityMatrix;
+
+    //tao 1 mang 2 chieu luu vi tri dat bomb
+    private static char[][] bombMap;
+
+    private int level;
+
+    private Stage stage;
+
+    private Group root;
+    private Scene scene;
+
+    private GraphicsContext gc;
+    private Canvas canvas;
+    private List<Entity> stillObjects = new ArrayList<>();
+
+    private List<Entity> GrassOnly = new ArrayList<>();
+
+    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+    private static List<ActiveEntity> activeObjects = new ArrayList<>();
+    private static List<Bomb> Bombs = new ArrayList<>();
+
+    private static Bomber MainCharacter;
+
+    private static boolean isLeftPressed = false;
+    private static boolean isRightPressed = false;
+    private static boolean isSpacePressed = false;
+
+    private static boolean isUpPressed = false;
+
+    private static boolean isDownPressed = false;
 
 
     public GameManagement() {
@@ -351,39 +351,39 @@ public class GameManagement {
         return MainCharacter;
     }
 
-//    public static char[][] getMapMatrix() {
-//        return mapMatrix;
-//    }
-//
-//    public Entity[][] getEntityMatrix() {
-//        return EntityMatrix;
-//    }
-//
-//    public char[][] getBombMap() {
-//        return bombMap;
-//    }
-//
-//    public List<ActiveEntity> getActiveObjects() {
-//        return activeObjects;
-//    }
-//
-//    public static boolean isLeftPressed() {
-//        return isLeftPressed;
-//    }
-//
-//    public static boolean isRightPressed() {
-//        return isRightPressed;
-//    }
-//
-//    public static boolean isSpacePressed() {
-//        return isSpacePressed;
-//    }
-//
-//    public static boolean isUpPressed() {
-//        return isUpPressed;
-//    }
-//
-//    public static boolean isDownPressed() {
-//        return isDownPressed;
-//    }
+    public static char[][] getMapMatrix() {
+        return mapMatrix;
+    }
+
+    public static Entity[][] getEntityMatrix() {
+        return EntityMatrix;
+    }
+
+    public static char[][] getBombMap() {
+        return bombMap;
+    }
+
+    public static List<ActiveEntity> getActiveObjects() {
+        return activeObjects;
+    }
+
+    public static boolean isLeftPressed() {
+        return isLeftPressed;
+    }
+
+    public static boolean isRightPressed() {
+        return isRightPressed;
+    }
+
+    public static boolean isSpacePressed() {
+        return isSpacePressed;
+    }
+
+    public static boolean isUpPressed() {
+        return isUpPressed;
+    }
+
+    public static boolean isDownPressed() {
+        return isDownPressed;
+    }
 }

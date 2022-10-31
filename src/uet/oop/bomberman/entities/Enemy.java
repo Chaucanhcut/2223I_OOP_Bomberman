@@ -1,12 +1,13 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.GameManagement;
 
 import java.awt.*;
 import java.util.Random;
 
-import static uet.oop.bomberman.GameManagement.EntityMatrix;
-import static uet.oop.bomberman.GameManagement.bombMap;
+//import static uet.oop.bomberman.GameManagement;
+//import static uet.oop.bomberman.GameManagement.bombMap;
 
 public abstract class Enemy extends MovableEntities {
 
@@ -58,7 +59,7 @@ public abstract class Enemy extends MovableEntities {
      * hàm check xem có thể đi qua ô có index x, y trên mapMatrix không.
      */
     protected boolean canPass(int x, int y) {
-        if (EntityMatrix[x][y] instanceof Wall || EntityMatrix[x][y] instanceof Brick) {
+        if (GameManagement.getEntityMatrix()[x][y] instanceof Wall || GameManagement.getEntityMatrix()[x][y] instanceof Brick) {
             return false;
         }
         return true;

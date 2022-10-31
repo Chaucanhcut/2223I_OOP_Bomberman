@@ -48,7 +48,7 @@ public class Flame extends ImmovableEntities {
                 // Mảng dx, dy dùng để tạo flame theo 4 hướng up, down, left, right.
                 int[] dy = {-i, i, 0, 0};
                 int[] dx = {0, 0, -i, i};
-                char tile = GameManagement.mapMatrix[yBomb + dy[k]][xBomb + dx[k]];
+                char tile = GameManagement.getMapMatrix()[yBomb + dy[k]][xBomb + dx[k]];
                 if (tile != '#') {
                     if (i == powerFlames || tile == '*') { // Nếu là flame cuối hoặc gặp vật cản
                         flameList.add(new Flame(xBomb + dx[k], yBomb + dy[k], direction[k], true, Sprite.explosion_vertical.getFxImage()));

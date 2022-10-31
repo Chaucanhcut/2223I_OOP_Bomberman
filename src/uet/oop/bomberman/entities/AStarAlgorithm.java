@@ -4,7 +4,7 @@ import uet.oop.bomberman.GameManagement;
 
 import java.util.*;
 
-import static uet.oop.bomberman.GameManagement.mapMatrix;
+//import static uet.oop.bomberman.GameManagement.mapMatrix;
 
 public class AStarAlgorithm {
     private Node[][] searchArea; // mang chua cac Node theo khu vuc tim kiem (map dau vao)
@@ -41,7 +41,7 @@ public class AStarAlgorithm {
             for (int j = 0; j < searchArea[0].length; j++) {
                 searchArea[i][j] = new Node(i, j);
                 searchArea[i][j].calculateH(finalNode);
-                searchArea[i][j].setBlocked(mapMatrix[i][j] == '#' || mapMatrix[i][j] == '*' || GameManagement.bombMap[i][j] == '@');
+                searchArea[i][j].setBlocked(GameManagement.getMapMatrix()[i][j] == '#' || GameManagement.getMapMatrix()[i][j] == '*' || GameManagement.getBombMap()[i][j] == '@');
 //                searchArea[i][j].setBlocked(GameManagement.getMapMatrix()[i][j] == '#' || GameManagement.getMapMatrix()[i][j] == '*');
             }
         }

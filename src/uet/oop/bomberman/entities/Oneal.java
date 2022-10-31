@@ -40,8 +40,8 @@ public class Oneal extends Enemy {
             if (getY() % Sprite.SCALED_SIZE == 0 && getX() % Sprite.SCALED_SIZE == 0) {
                 int xMap = getYMap();
                 int yMap = getXMap();
-                Direction = getAStarDirection(xMap, yMap, mapMatrix);
-                speed = random.nextInt(2) + 1; // Random lại speed
+                Direction = getAStarDirection(xMap, yMap, getMapMatrix());
+//                speed = random.nextInt(2) + 1; // Random lại speed
             }
             Move();
         }
@@ -72,7 +72,7 @@ public class Oneal extends Enemy {
 
     @Override
     public void movingUp() {
-        if (mapMatrix[getYMap()][getXMap()] != '*' && mapMatrix[getYMap()][getXMap()] != '#') {
+        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#') {
             setY(getY() - speed);
         }
         setImg(Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, animation, 20).getFxImage());
@@ -80,7 +80,7 @@ public class Oneal extends Enemy {
 
     @Override
     public void movingDown() {
-        if (mapMatrix[getYMap()][getXMap()] != '*' && mapMatrix[getYMap()][getXMap()] != '#') {
+        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#') {
             setY(getY() + speed);
         }
         setImg(Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, animation, 20).getFxImage());
@@ -88,7 +88,7 @@ public class Oneal extends Enemy {
 
     @Override
     public void movingLeft() {
-        if (mapMatrix[getYMap()][getXMap()] != '*' && mapMatrix[getYMap()][getXMap()] != '#') {
+        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#') {
             setX(getX() - speed);
         }
         setImg(Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, animation, 20).getFxImage());
@@ -96,7 +96,7 @@ public class Oneal extends Enemy {
 
     @Override
     public void movingRight() {
-        if (mapMatrix[getYMap()][getXMap()] != '*' && mapMatrix[getYMap()][getXMap()] != '#') {
+        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#') {
             setX(getX() + speed);
         }
         setImg(Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, animation, 20).getFxImage());

@@ -21,7 +21,7 @@ public class Brick extends ImmovableEntities {
             if (animationTime < 0) { // Nếu đã hết thời gian sau khi nổ
                 int xBrick = getYMap();
                 int yBrick = getXMap();
-                GameManagement.mapMatrix[xBrick][yBrick] = ' ';
+                GameManagement.getMapMatrix()[xBrick][yBrick] = ' ';
                 delete = true; // Xoá
             }
             // Animation brick nổ
