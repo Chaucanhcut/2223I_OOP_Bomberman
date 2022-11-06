@@ -21,7 +21,7 @@ public class Bomb extends ImmovableEntities{
         this.FlamesPower = FlamesPower;
         active = true;
         delete = false;
-        timeExplode = 1500;
+        timeExplode = 1200;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Bomb extends ImmovableEntities{
         if (timeExplode > 0) { // Chưa nổ thì cho hiện bomb
 //            System.out.println("sap no");
             timeExplode--;
-            setImg(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExplode, 200).getFxImage());
+            setImg(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExplode, 100).getFxImage());
         } else { // Nổ rồi thì cho hiện flame
             if (!added) {
                 // Tạo flame
@@ -45,7 +45,7 @@ public class Bomb extends ImmovableEntities{
                 GameManagement.getBombMap()[getYMap()][getXMap()] = ' ';
             }
             // Animation bom nổ
-            setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 200).getFxImage());
+            setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 100).getFxImage());
             //BombermanGame.bombSound.play(false, 0);
         }
     }

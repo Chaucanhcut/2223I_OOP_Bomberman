@@ -59,7 +59,12 @@ public abstract class Enemy extends MovableEntities {
      * hàm check xem có thể đi qua ô có index x, y trên mapMatrix không.
      */
     protected boolean canPass(int x, int y) {
-        if (GameManagement.getEntityMatrix()[x][y] instanceof Wall || GameManagement.getEntityMatrix()[x][y] instanceof Brick) {
+//        if (GameManagement.getEntityMatrix()[x][y] instanceof Wall || GameManagement.getEntityMatrix()[x][y] instanceof Brick ) {
+//            return false;
+//        }
+//        return true;
+
+        if (GameManagement.getMapMatrix()[x][y] == '#' || GameManagement.getMapMatrix()[x][y] == '*') {
             return false;
         }
         return true;

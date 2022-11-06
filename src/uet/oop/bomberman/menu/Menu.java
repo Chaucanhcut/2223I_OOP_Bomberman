@@ -125,8 +125,8 @@ public class Menu {
             // Play button
              menuButton playButton = new menuButton("PLAY");
              playButton.setOnMouseClicked(event -> {
-                 GameManagement.playerCount = 1;
-                 GameManagement.gameState = "newGame";
+                 GameManagement.setPlayerCount(1);
+                 GameManagement.setGameState("newGame");
                  stage.setScene(sceneGameBoard);
              });
 
@@ -151,7 +151,7 @@ public class Menu {
             textMenu tutorial = new textMenu(tutorialName, 300, 250);
 
             // Sound Button
-            backgroundSound.play(true, 0);
+            GameManagement.getBackgroundSound().play(true, 0);
 
             menuButton soundButton = new menuButton("SOUND");
             soundButton.setOnMouseClicked(event -> {
@@ -172,11 +172,11 @@ public class Menu {
 
             // Mute Sound
             menuButton mute = new menuButton("MUTE");
-            mute.setOnMouseClicked(event -> backgroundSound.play(false, 0));
+            mute.setOnMouseClicked(event -> GameManagement.getBackgroundSound().play(false, 0));
 
             // Unmute Sound
             menuButton unMute = new menuButton("UNMUTE");
-            unMute.setOnMouseClicked(event -> backgroundSound.play(true, 0));
+            unMute.setOnMouseClicked(event -> GameManagement.getBackgroundSound().play(true, 0));
 
             // Back from menu 2 to menu 0
             menuButton backButton2 = new menuButton("BACK");
@@ -301,9 +301,9 @@ public class Menu {
             //Replay button
             menuButton replayButton = new menuButton("REPLAY");
             replayButton.setOnMouseClicked(event -> {
-                GameManagement.gameState = "newGame";
-                defeatSound.play(false, 0);
-                victorySound.play(false, 0);
+                GameManagement.setGameState("newGame");
+                GameManagement.getDeadSound().play(false, 0);
+                GameManagement.getVictorySound().play(false, 0);
                 stage.setScene(sceneGameBoard);
             });
 
@@ -315,8 +315,8 @@ public class Menu {
             menuButton mainMenuButton = new menuButton("MAIN MENU");
             mainMenuButton.setOnMouseClicked(event -> {
 
-                defeatSound.play(false, 0);
-                victorySound.play(false, 0);
+                GameManagement.getDeadSound().play(false, 0);
+                GameManagement.getVictorySound().play(false, 0);
                 stage.setScene(sceneMenu);
             });
 

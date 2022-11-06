@@ -40,23 +40,26 @@ public class BombermanGame extends Application {
     public static Scene sceneGameOver;
     public static Scene sceneVictory;
     //-------------------------
-
-    private boolean isOver = false;
-
     @Override
     public void start(Stage mainStage) {
 
         /** Test game management.*/
         // 2 dong code tiep theo dung de load game board
-        //GameManagement game = new GameManagement();
-        //mainStage = game.getStage();
 
+//        GameManagement game = new GameManagement();
+//        mainStage = game.getStage();
+//
+//        stage = mainStage;
+//        stage.setTitle("Bomberman game");
+
+
+//        add 2246 311022------------ load cac scene: menu, game board, game over, victory
         stage = mainStage;
-        stage.setTitle("Bomberman game");
+        stage.setTitle("Bomberman Game");
 
-        //add 2246 311022------------ load cac scene: menu, game board, game over, victory 
         sceneMenu = GameManagement.createSceneMenu();
         stage.setScene(sceneMenu);
+
         sceneGameBoard = GameManagement.createSceneGameBoard();
         sceneGameOver = GameManagement.createSceneGameOver();
         sceneVictory = GameManagement.createSceneVictory();
@@ -69,39 +72,6 @@ public class BombermanGame extends Application {
         /** ham default.*/
         stage.show();
 
-
-//        /** Test Event Key Press. */
-//        ArrayList<String> KeyInput = new ArrayList<String>();
-//        scene.setOnKeyPressed(
-//                new EventHandler<KeyEvent>() {
-//                    @Override
-//                    public void handle(KeyEvent e) {
-//                        String code = e.getCode().toString();
-//                        if (!KeyInput.contains(code)) {
-//                            KeyInput.add(code);
-//                        }
-//                    }
-//                }
-//        );
-//        scene.setOnKeyReleased(
-//                new EventHandler<KeyEvent>() {
-//                    @Override
-//                    public void handle(KeyEvent e) {
-//                        String code = e.getCode().toString();
-//                        KeyInput.remove(code);
-//                    }
-//                }
-//        );
-//        gc = canvas.getGraphicsContext2D();
-//        Image left = new Image("player_left.png");
-//        Image right = new Image("player_right.png");
-//
-//        new AnimationTimer()() {
-//            public void handle(long currentNanoTime) {
-//                if (KeyInput.contains("RIGHT"))
-//
-//            }
-//        }
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,9 @@
 package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Bomber;
@@ -27,9 +31,7 @@ import uet.oop.bomberman.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static uet.oop.bomberman.BombermanGame.*;
 
@@ -70,33 +72,32 @@ public class GameManagement {
 //
 //    public static boolean isDownPressed = false;
 
+    private static int WIDTH = 31;
+    private static int HEIGHT = 13;
 
-    protected static int WIDTH = 31;
-    protected static int HEIGHT = 13;
+    public static boolean portalCheck = false;
 
-    protected static char[][] mapMatrix;
-    protected static Entity[][] EntityMatrix;
     //tao 1 mang 2 chieu luu vi tri dat bomb
-    protected static char[][] bombMap = new char[HEIGHT][WIDTH];
+    public static char[][] bombMap = new char[HEIGHT][WIDTH];
 
-    protected static int level = 1;
-    protected static int width = 0;
-    protected static int height = 0;
+    private static int level = 1;
+    private static int width = 0;
+    private static int height = 0;
 
-    private static Stage stage;
+//    private static Stage stage;
 
     private static Group root;
     private static Scene scene;
 
-    protected static GraphicsContext gc;
-    private static Canvas canvas;
-    protected static List<Entity> stillObjects = new ArrayList<>();
-    protected static List<Entity> GrassOnly = new ArrayList<>();
-    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
-    protected static List<ActiveEntity> activeObjects = new ArrayList<>();
+//    public static GraphicsContext gc;
+//    public static Canvas canvas;
+//    public static List<Entity> stillObjects = new ArrayList<>();
+//    public static List<Entity> GrassOnly = new ArrayList<>();
+//    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+//    public static List<ActiveEntity> activeObjects = new ArrayList<>();
     private static List<Bomb> Bombs = new ArrayList<>();
 
-    protected static Bomber MainCharacter;
+//    public static Bomber MainCharacter;
 
     private static boolean isLeftPressed = false;
     private static boolean isRightPressed = false;
@@ -108,18 +109,36 @@ public class GameManagement {
     //public static boolean portalCheck = false; // check for level-up
     private static int gameTime = 12000;// tgian moi man choi = 200s
     private static int delayTime = 100;
-    public static int playerCount = 0;
+    private static int playerCount = 0;
     //-------SOUND--------
-    public static Sound bombSound = new Sound("bombSound");
-    public static Sound deadSound = new Sound("deadSound");
-    public static Sound powerUpSound = new Sound("powerup");
-    public static Sound victorySound = new Sound("victorySound");
-    public static Sound defeatSound = new Sound("defeatSound");
-    public static Sound backgroundSound = new Sound("start");
+    private static Sound bombSound = new Sound("bombSound");
+    private static Sound deadSound = new Sound("deadSound");
+    private static Sound powerUpSound = new Sound("powerup");
+    private static Sound victorySound = new Sound("victorySound");
+    private static Sound defeatSound = new Sound("defeatSound");
+    private static Sound backgroundSound = new Sound("start");
     //-----------------------------------------------
-    public static String gameState = "newGame";
-    public static Text time, Level;
-    public static ImageView resumeView, pauseView, muteView, unMuteView;
+    private static String gameState = "newGame";
+    private static Text time, Level;
+    private static ImageView resumeView, pauseView, muteView, unMuteView;
+
+    public static char[][] mapMatrix;
+
+//    private static char[][] mapMatrix;
+
+//    public static Entity[][] EntityMatrix;
+
+    public static GraphicsContext gc;
+    public static Canvas canvas;
+    public static List<Entity> stillObjects = new ArrayList<>();
+    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+    public static List<ActiveEntity> activeObjects = new ArrayList<>();
+
+    public static List<Entity> EntityToCheck = new ArrayList<>();
+
+    public static Bomber MainCharacter;
+
+//    public static Portal portal;
 
     /** create scene Main menu. */
     public static Scene createSceneMenu() {
@@ -206,7 +225,6 @@ public class GameManagement {
 
         // Tao scene
         sceneGameBoard = new Scene(root);
-        //stage.setScene(sceneGameBoard);
 
         resetGame();
 
@@ -215,29 +233,24 @@ public class GameManagement {
             public void handle(long l) {
                 if (gameState.equals("newGame")) {
                     resetGame();
-                  // if (level == 0) level = 1;
-                  // if (playerCount > 0 && level > 0) {
-                  // //if (level > 0) {
-                  //     try {
-                  //         mapMatrix = Map.readMap("res/levels/Level" + level + ".txt");
-                  //     } catch (IOException e) {
-                  //         throw new RuntimeException(e);
-                  //     }
-                  //     Map.loadMap();
-                  //     if (playerCount == 1) addPlayer();
-                  // }
 
-                    setProperties();
-                    createMap();
+                    try {
+                        mapMatrix = Map.readMap("res/levels/Level1.txt");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Map.loadMap();
+                    addPlayer();
                 }
 
                 if (gameState.equals("Running")) {
                     render();
-   //                 try {
-   //                     update();
-   //                 } catch (FileNotFoundException e) {
-   //                     throw new RuntimeException(e);
-   //                 }
+//                    try {
+//                        update();
+//                    } catch (FileNotFoundException e) {
+//                        throw new RuntimeException(e);
+//                    }
+                    update();
                 }
 
                 if (gameState.equals("Pause")) {
@@ -248,11 +261,11 @@ public class GameManagement {
                     bombSound.play(false, 0);
                     powerUpSound.play(false, 0);
                     render();
- //                  try {
- //                      update();
- //                  } catch (FileNotFoundException e) {
- //                      throw new RuntimeException(e);
- //                  }
+//                   try {
+//                       update();
+//                   } catch (FileNotFoundException e) {
+//                       throw new RuntimeException(e);
+//                   }
                     if (delayTime-- == 0) {
                         level = 0;
                         defeatSound.play(true, 0);
@@ -279,11 +292,18 @@ public class GameManagement {
                         levelUp.setVisible(false);
                     }
                 }
+
+                if (gameState.equals("Victory")) {
+//                    powerUpSound.play(true, 0);
+                    victorySound.play(true, 0);
+                    stage.setScene(sceneVictory); // Chuyển qua scene victory
+                }
             }
         };
         timer.start();
         return sceneGameBoard;
     }
+
 
     private static void resetGame() {
         activeObjects.clear();
@@ -308,33 +328,33 @@ public class GameManagement {
     //end add---------------------------------------------------
 
 
-    public GameManagement() {
-        setProperties();
-        createMap();
-
-        stage = new Stage();
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        gc = canvas.getGraphicsContext2D();
-
-        /** Tạo root container. */
-        Group root = new Group();
-        root.getChildren().add(canvas);
-
-        /** Tạo scene. */
-        scene = new Scene(root);
-
-        /** Thêm scene vào stage. */
-        stage.setScene(scene);
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                render();
-                update();
-            }
-        };
-        timer.start();
-    }
+//    public GameManagement() {
+//        setProperties();
+//        createMap();
+//
+//        stage = new Stage();
+//        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+//        gc = canvas.getGraphicsContext2D();
+//
+//        /** Tạo root container. */
+//        Group root = new Group();
+//        root.getChildren().add(canvas);
+//
+//        /** Tạo scene. */
+//        scene = new Scene(root);
+//
+//        /** Thêm scene vào stage. */
+//        stage.setScene(scene);
+//
+//        AnimationTimer timer = new AnimationTimer() {
+//            @Override
+//            public void handle(long l) {
+//                render();
+//                update();
+//            }
+//        };
+//        timer.start();
+//    }
 
     public Stage getStage () {
         return stage;
@@ -370,83 +390,48 @@ public class GameManagement {
             }
         }
 
-        EntityMatrix = new Entity[HEIGHT][WIDTH];
+//        EntityMatrix = new Entity[HEIGHT][WIDTH];
 
-    }
-
-    /** Create map từ file. */
-    private static void createMap() {
-        for (int i = 0; i < HEIGHT; i++) {
+        for (int k = 0; k < HEIGHT; k++) {
             for (int j = 0; j < WIDTH; j++) {
-                switch (mapMatrix[i][j]) {
-                    // Wall
-                    case '#': {
-                        Entity object = new Wall(j, i, Sprite.wall.getFxImage());
-                        stillObjects.add(object);
-                        EntityMatrix[i][j] = object;
-                        break;
-                    }
-                    // Brick
-                    case '*': {
-                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(grassObject);
-                        ActiveEntity object = new Brick(j, i, Sprite.brick.getFxImage());
-                        activeObjects.add(object);
-                        stillObjects.add(object);
-                        EntityMatrix[i][j] = object;
-                        break;
-                    }
-                    // Balloon
-                    case '1': {
-                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(grassObject);
-                        MovableEntities object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
-                        activeObjects.add(object);
-                        EntityMatrix[i][j] = object;
-                        break;
-                    }
-                    // Oneal
-                    case '2': {
-                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(grassObject);
-                        MovableEntities object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                        activeObjects.add(object);
-                        EntityMatrix[i][j] = object;
-                        break;
-                    }
-                    // Player - bomber
-                    case 'p': {
-                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(grassObject);
-                        MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(), gc);
-//                        activeObjects.add(MainCharacter);
-                        break;
-                    }
-                    // Portal
-                    case 'x': {
-                        Entity grassObject = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(grassObject);
-                        Entity object = new Portal(j,i,Sprite.portal.getFxImage());
-                        stillObjects.add(object);
-                        EntityMatrix[i][j] = object;
-                        break;
-                    }
-                    // Grass
-                    default: {
-                        Entity object = new Grass(j, i, Sprite.grass.getFxImage());
-                        GrassOnly.add(object);
-                        break;
-                    }
-                }
+                bombMap[k][j] = ' ';
             }
         }
     }
 
     public static void update() {
+
+        for (int i = 0; i < stillObjects.size(); i++) {
+            if (stillObjects.get(i) instanceof Portal) {
+                MainCharacter.checkVictory((Portal)stillObjects.get(i));
+            }
+        }
+
+
+//        for (int i = 0; i < activeObjects.size(); i++) {
+//            System.out.println(activeObjects.get(i));
+//        }
+
+//        for (int i = 0; i < HEIGHT; i++) {
+//            for (int j = 0; j < WIDTH; j++) {
+//                System.out.print(bombMap[i][j]);
+//            }
+//            System.out.println();
+//        }
+
+        if (MainCharacter.isDead()) {
+            SequentialTransition seqTransition = new SequentialTransition (
+                    new PauseTransition(Duration.millis(5000)) // wait a second
+            );
+            seqTransition.play();
+        }
+
+
         keyListener();
+
         MainCharacter.update();
+
         Bombs.forEach(Bomb::update);
-        checkBomberCollision();
 
         for (int i = 0; i < activeObjects.size(); i++) {
             activeObjects.get(i).update();
@@ -469,27 +454,19 @@ public class GameManagement {
             }
         }
 
-        for (int i = 0; i < stillObjects.size(); i++) {
-            if (stillObjects.get(i) instanceof Brick && ((Brick) stillObjects.get(i)).delete) {
-                stillObjects.remove(stillObjects.get(i));
-            }
+        if (portalCheck) {
+            gameState = "Victory";
+            return;
         }
     }
 
 
     public static void render () {
-//        System.out.println("BombMap:");
-//        for (int i = 0; i < HEIGHT; i++) {
-//            for (int j = 0; j < WIDTH; j++) {
-//                System.out.print(bombMap[i][j]);
-//            }
-//            System.out.println();
-//        }
+
+
 
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        GrassOnly.forEach(g -> g.render(gc));
         stillObjects.forEach(g -> g.render(gc));
-//        entities.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
         Bombs.forEach(g -> g.render(gc));
 
@@ -504,7 +481,8 @@ public class GameManagement {
     /** Hàm nhận event từ Keyboard. */
     public static void keyListener() {
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        sceneGameBoard.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) {
@@ -529,7 +507,7 @@ public class GameManagement {
             }
         });
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        sceneGameBoard.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) {
@@ -551,16 +529,6 @@ public class GameManagement {
         });
     }
 
-
-    public static void checkBomberCollision() {
-        for (int i = 0; i < stillObjects.size(); i++) {
-            MainCharacter.CheckImagineMove(stillObjects.get(i));
-        }
-        for (int i = 0; i < activeObjects.size(); i++) {
-            MainCharacter.checkIfDead(activeObjects.get(i));
-        }
-    }
-
     public static Bomber getBomber() {
         return MainCharacter;
     }
@@ -569,9 +537,6 @@ public class GameManagement {
         return mapMatrix;
     }
 
-    public static Entity[][] getEntityMatrix() {
-        return EntityMatrix;
-    }
 
     public static char[][] getBombMap() {
         return bombMap;
@@ -600,4 +565,90 @@ public class GameManagement {
     public static boolean isDownPressed() {
         return isDownPressed;
     }
+
+    public static int getWIDTH() {
+        return WIDTH;
+    }
+
+    public static int getHEIGHT() {
+        return HEIGHT;
+    }
+
+    public static int getLevel() {
+        return level;
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
+    public static List<Entity> getStillObjects() {
+        return stillObjects;
+    }
+
+    public static List<Bomb> getBombs() {
+        return Bombs;
+    }
+
+    public static Bomber getMainCharacter() {
+        return MainCharacter;
+    }
+
+    public static void setLevel(int level) {
+        GameManagement.level = level;
+    }
+
+    public static void setWidth(int width) {
+        GameManagement.width = width;
+    }
+
+    public static void setHeight(int height) {
+        GameManagement.height = height;
+    }
+
+    public static void setBombMap(char[][] bombMap, int x, int y, char c) {
+        bombMap[x][y] = c;
+    }
+
+    public static void setPlayerCount(int playerCount) {
+        GameManagement.playerCount = playerCount;
+    }
+
+    public static Sound getBombSound() {
+        return bombSound;
+    }
+
+    public static Sound getDeadSound() {
+        return deadSound;
+    }
+
+    public static Sound getPowerUpSound() {
+        return powerUpSound;
+    }
+
+    public static Sound getVictorySound() {
+        return victorySound;
+    }
+
+    public static Sound getDefeatSound() {
+        return defeatSound;
+    }
+
+    public static Sound getBackgroundSound() {
+        return backgroundSound;
+    }
+
+    public static String getGameState() {
+        return gameState;
+    }
+
+    public static void setGameState(String gameState) {
+        GameManagement.gameState = gameState;
+    }
+
+
 }

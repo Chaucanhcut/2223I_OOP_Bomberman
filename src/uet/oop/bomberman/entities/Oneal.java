@@ -41,7 +41,6 @@ public class Oneal extends Enemy {
                 int xMap = getYMap();
                 int yMap = getXMap();
                 Direction = getAStarDirection(xMap, yMap, getMapMatrix());
-//                speed = random.nextInt(2) + 1; // Random lại speed
             }
             Move();
         }
@@ -72,7 +71,7 @@ public class Oneal extends Enemy {
 
     @Override
     public void movingUp() {
-        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#') {
+        if (getMapMatrix()[getYMap()][getXMap()] != '*' && getMapMatrix()[getYMap()][getXMap()] != '#' || getBombMap()[getYMap()][getXMap()] != '@') {
             setY(getY() - speed);
         }
         setImg(Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, animation, 20).getFxImage());
