@@ -236,6 +236,7 @@ public class GameManagement {
 
                     try {
                         mapMatrix = Map.readMap("res/levels/Level1.txt");
+//                        mapMatrix = Map.readMap("res/levels/testLevel.txt");
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -463,8 +464,6 @@ public class GameManagement {
 
     public static void render () {
 
-
-
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
         MainCharacter.render(gc);
@@ -476,6 +475,15 @@ public class GameManagement {
                 entity.render(gc);
             }
         }
+    }
+
+    public static boolean CheckEnemyKilled() {
+        for (int i = 0; i < activeObjects.size(); i++) {
+            if (activeObjects.get(i) instanceof Enemy) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Hàm nhận event từ Keyboard. */

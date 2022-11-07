@@ -183,7 +183,7 @@ public class Bomber extends MovableEntities {
     }
 
     public void checkVictory(Portal p) {
-        if (this.getBoundingRect().intersects(p.getBoundingRect())) {
+        if (this.getBoundingRect().intersects(p.getBoundingRect()) && CheckEnemyKilled()) {
             portalCheck = true;
             System.out.println("YES");
         }
