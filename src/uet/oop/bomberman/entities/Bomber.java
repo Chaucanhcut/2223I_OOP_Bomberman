@@ -104,6 +104,7 @@ public class Bomber extends MovableEntities {
             yUnit = newY + dy[i];
             if (GameManagement.getMapMatrix()[yUnit][xUnit] != '*' && GameManagement.getMapMatrix()[yUnit][xUnit] != '#') {
                 bombMap[yUnit][xUnit] = '@'; // vị trí đặt bomb
+                GameManagement.getBombSound().play(true, 0);
                 count--;
                 activeObjects.add(new Bomb(getXMap(), (int) (this.getBoundingRect().getY() / 32), Sprite.bomb.getFxImage(), powerFlames));
             }

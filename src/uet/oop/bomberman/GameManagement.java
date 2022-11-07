@@ -233,15 +233,18 @@ public class GameManagement {
             public void handle(long l) {
                 if (gameState.equals("newGame")) {
                     resetGame();
-
-                    try {
-                        mapMatrix = Map.readMap("res/levels/Level1.txt");
+                    if (level == 0) level = 1;
+                    if (level > 0) {
+                        try {
+//                        mapMatrix = Map.readMap("res/levels/Level1.txt");
 //                        mapMatrix = Map.readMap("res/levels/testLevel.txt");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                            mapMatrix= Map.readMap("res/levels/Level" + level+ ".txt");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Map.loadMap();
+                        addPlayer();
                     }
-                    Map.loadMap();
-                    addPlayer();
                 }
 
                 if (gameState.equals("Running")) {
@@ -261,6 +264,7 @@ public class GameManagement {
                 if (gameState.equals("gameOver")) {
                     bombSound.play(false, 0);
                     powerUpSound.play(false, 0);
+                    backgroundSound.play(false, 0);
                     render();
 //                   try {
 //                       update();
@@ -288,7 +292,7 @@ public class GameManagement {
                     if (delayTime-- == 0) {
                         powerUpSound.play(false, 0);
                         gameState = "newGame";
-                        //portalCheck = false;
+                        portalCheck = false;
                         level++;
                         levelUp.setVisible(false);
                     }
@@ -477,20 +481,27 @@ public class GameManagement {
         /**
          * Game over.
          */
-//        if (playerCount == 1 && !bomber1.active) {
-//            gameState = "gameOver";
-//            return;
-//        }
+
+        if (!MainCharacter.active) {
+            gameState = "gameOver";
+            return;
+        }
+
+        if (gameTime < 0) {
+            gameState = "gameOver";
+            return;
+        }
+
+        if (portalCheck) {
+            gameState = "Victory"; // 1 level only
+            //gameState = "levelUp"; // multiple (3) levels
+            return;
+        }
 
         for (int i = 0; i < activeObjects.size(); i++) {
             if (activeObjects.get(i).delete) {
                 activeObjects.remove(activeObjects.get(i));
             }
-        }
-
-        if (portalCheck) {
-            gameState = "Victory";
-            return;
         }
     }
 

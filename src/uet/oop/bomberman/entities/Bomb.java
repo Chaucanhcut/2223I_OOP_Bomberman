@@ -46,7 +46,7 @@ public class Bomb extends ImmovableEntities{
             }
             // Animation bom nổ
             setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 100).getFxImage());
-            //BombermanGame.bombSound.play(false, 0);
+            GameManagement.getBombSound().play(false, 0);
         }
     }
 }
