@@ -302,7 +302,7 @@ public class Menu {
             menuButton replayButton = new menuButton("REPLAY");
             replayButton.setOnMouseClicked(event -> {
                 GameManagement.setGameState("newGame");
-                GameManagement.getDeadSound().play(false, 0);
+                GameManagement.getDefeatSound().play(false, 0);
                 GameManagement.getVictorySound().play(false, 0);
                 stage.setScene(sceneGameBoard);
             });
@@ -315,7 +315,7 @@ public class Menu {
             menuButton mainMenuButton = new menuButton("MAIN MENU");
             mainMenuButton.setOnMouseClicked(event -> {
 
-                GameManagement.getDeadSound().play(false, 0);
+                GameManagement.getDefeatSound().play(false, 0);
                 GameManagement.getVictorySound().play(false, 0);
                 stage.setScene(sceneMenu);
             });

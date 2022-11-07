@@ -402,6 +402,39 @@ public class GameManagement {
 
     public static void update() {
 
+        Level.setText("Level: " + level);
+        time.setText("Time: " + gameTime-- / 60);
+
+        pauseView.setOnMouseClicked(mouseEvent -> {
+            backgroundSound.play(false, 0);
+            bombSound.play(false, 0);
+            deadSound.play(false, 0);
+            powerUpSound.play(false, 0);
+            pauseView.setVisible(false);
+            resumeView.setVisible(true);
+            gameState = "Pause";
+        });
+
+        resumeView.setOnMouseClicked(mouseEvent -> {
+            backgroundSound.play(true, 0);
+            resumeView.setVisible(false);
+            pauseView.setVisible(true);
+            gameState = "Running";
+        });
+
+        muteView.setOnMouseClicked(mouseEvent -> {
+            backgroundSound.play(true, 0);
+            muteView.setVisible(false);
+            unMuteView.setVisible(true);
+        });
+
+        unMuteView.setOnMouseClicked(mouseEvent -> {
+            backgroundSound.play(false, 0);
+            unMuteView.setVisible(false);
+            muteView.setVisible(true);
+
+        });
+
         for (int i = 0; i < stillObjects.size(); i++) {
             if (stillObjects.get(i) instanceof Portal) {
                 MainCharacter.checkVictory((Portal)stillObjects.get(i));
@@ -471,7 +504,7 @@ public class GameManagement {
 
         for (ActiveEntity entity : activeObjects) {
             if (!entity.delete) {
-//                powerUpSound.play(false, 0);
+                powerUpSound.play(false, 0);
                 entity.render(gc);
             }
         }
