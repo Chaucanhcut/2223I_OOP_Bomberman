@@ -18,12 +18,6 @@ public class Flame extends ImmovableEntities {
 
     /**
      * Tạo flame.
-     *
-     * @param xUnit     tọa độ hàng trên map
-     * @param yUnit     tọa độ cột trên map
-     * @param direction hướng của flame
-     * @param last      xem có là flame cuối hay ko
-     * @param img       ảnh flame
      */
     public Flame(int xUnit, int yUnit, int direction, boolean last, Image img) {
         super(xUnit, yUnit, img);
@@ -116,16 +110,10 @@ public class Flame extends ImmovableEntities {
         }
     }
 
-    /**
-     * Xử lý va chạm flame với các entity khác.
-     *
-     * @param entity đối tượng va chạm với flame
-     */
     @Override
     public void collide(ActiveEntity entity) {
         // Nếu flame chưa kích hoạt || entity chết
         // hoặc va chạm với flame khác || powerup thì ko làm gì cả
-        //if (!active || !entity.active || entity instanceof Flame || entity instanceof Item) {
         if (!active || !entity.active || entity instanceof Flame) {
             return;
         }
@@ -144,7 +132,13 @@ public class Flame extends ImmovableEntities {
                 return;
             }
             // Gặp các entity khác
+
+            if (entity instanceof Bomber && ((Bomber) entity).getFlamePass()) {
+                return;
+            }
+
             entity.active = false;
         }
+
     }
 }

@@ -15,7 +15,6 @@ public abstract class ImmovableEntities extends ActiveEntity {
 
     @Override
     public Rectangle getBoundingRect() {
-//        return new Rectangle(this.getXMap(), this.getYMap(), 32, 32);
         return this.BoundingRect;
     }
 

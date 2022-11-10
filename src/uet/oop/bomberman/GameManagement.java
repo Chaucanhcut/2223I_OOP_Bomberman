@@ -77,27 +77,18 @@ public class GameManagement {
 
     public static boolean portalCheck = false;
 
-    //tao 1 mang 2 chieu luu vi tri dat bomb
+    // Mảng 2 chiều lưu vị trí bomb
     public static char[][] bombMap = new char[HEIGHT][WIDTH];
 
     private static int level = 1;
     private static int width = 0;
     private static int height = 0;
 
-//    private static Stage stage;
 
     private static Group root;
     private static Scene scene;
 
-//    public static GraphicsContext gc;
-//    public static Canvas canvas;
-//    public static List<Entity> stillObjects = new ArrayList<>();
-//    public static List<Entity> GrassOnly = new ArrayList<>();
-//    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
-//    public static List<ActiveEntity> activeObjects = new ArrayList<>();
     private static List<Bomb> Bombs = new ArrayList<>();
-
-//    public static Bomber MainCharacter;
 
     private static boolean isLeftPressed = false;
     private static boolean isRightPressed = false;
@@ -105,11 +96,10 @@ public class GameManagement {
     private static boolean isUpPressed = false;
     private static boolean isDownPressed = false;
 
-    //add 2307 311022------------------------------------
-    //public static boolean portalCheck = false; // check for level-up
     private static int gameTime = 12000;// tgian moi man choi = 200s
     private static int delayTime = 100;
     private static int playerCount = 0;
+
     //-------SOUND--------
     private static Sound bombSound = new Sound("bombSound");
     private static Sound deadSound = new Sound("deadSound");
@@ -118,27 +108,23 @@ public class GameManagement {
     private static Sound defeatSound = new Sound("defeatSound");
     private static Sound backgroundSound = new Sound("start");
     //-----------------------------------------------
+
     private static String gameState = "newGame";
     private static Text time, Level;
     private static ImageView resumeView, pauseView, muteView, unMuteView;
 
     public static char[][] mapMatrix;
 
-//    private static char[][] mapMatrix;
-
-//    public static Entity[][] EntityMatrix;
-
     public static GraphicsContext gc;
     public static Canvas canvas;
     public static List<Entity> stillObjects = new ArrayList<>();
-    // tao 1 arraylist luu cac doi tuong movable( bomber, enemy) va bomb, brick
+
     public static List<ActiveEntity> activeObjects = new ArrayList<>();
 
     public static List<Entity> EntityToCheck = new ArrayList<>();
 
     public static Bomber MainCharacter;
 
-//    public static Portal portal;
 
     /** create scene Main menu. */
     public static Scene createSceneMenu() {
@@ -157,9 +143,6 @@ public class GameManagement {
 
     /** create scene Game board. */
     public static Scene createSceneGameBoard() {
-//       setProperties();
-//       createMap();
-//       stage = new Stage();
 
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -218,12 +201,12 @@ public class GameManagement {
        gameControl.setMinSize(992, 448);
        gameControl.setStyle("-fx-background-color: #427235");
 
-        // Tao root container
+        // Tạo root container
         Group root = new Group();
         root.getChildren().addAll(gameControl, canvas, levelUp);
         canvas.setTranslateY(32);
 
-        // Tao scene
+        // Tạo scene
         sceneGameBoard = new Scene(root);
 
         resetGame();
@@ -236,9 +219,10 @@ public class GameManagement {
                     if (level == 0) level = 1;
                     if (level > 0) {
                         try {
-//                        mapMatrix = Map.readMap("res/levels/Level1.txt");
+//                        mapMatrix = Map.readMap("res/levels/Level2.txt");
 //                        mapMatrix = Map.readMap("res/levels/testLevel.txt");
-                            mapMatrix= Map.readMap("res/levels/Level" + level+ ".txt");
+
+                            mapMatrix= Map.readMap("res/levels/Level" + level + ".txt");
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -249,11 +233,6 @@ public class GameManagement {
 
                 if (gameState.equals("Running")) {
                     render();
-//                    try {
-//                        update();
-//                    } catch (FileNotFoundException e) {
-//                        throw new RuntimeException(e);
-//                    }
                     update();
                 }
 
@@ -266,11 +245,7 @@ public class GameManagement {
                     powerUpSound.play(false, 0);
                     backgroundSound.play(false, 0);
                     render();
-//                   try {
-//                       update();
-//                   } catch (FileNotFoundException e) {
-//                       throw new RuntimeException(e);
-//                   }
+                    update();
                     if (delayTime-- == 0) {
                         level = 0;
                         defeatSound.play(true, 0);
@@ -299,7 +274,7 @@ public class GameManagement {
                 }
 
                 if (gameState.equals("Victory")) {
-//                    powerUpSound.play(true, 0);
+                    powerUpSound.play(true, 0);
                     victorySound.play(true, 0);
                     stage.setScene(sceneVictory); // Chuyển qua scene victory
                 }
@@ -308,7 +283,6 @@ public class GameManagement {
         timer.start();
         return sceneGameBoard;
     }
-
 
     private static void resetGame() {
         activeObjects.clear();
@@ -327,81 +301,7 @@ public class GameManagement {
         MainCharacter = new Bomber(1, 1, Sprite.player_right.getFxImage(), gc);
         activeObjects.add(MainCharacter);
         gameState = "Running";
-        //sceneGameBoard.setOnKeyPressed(keyEvent -> MainCharacter.handleKeyEvent1(keyEvent));
         sceneGameBoard.setOnKeyPressed(keyEvent -> MainCharacter.update());
-    }
-    //end add---------------------------------------------------
-
-
-//    public GameManagement() {
-//        setProperties();
-//        createMap();
-//
-//        stage = new Stage();
-//        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-//        gc = canvas.getGraphicsContext2D();
-//
-//        /** Tạo root container. */
-//        Group root = new Group();
-//        root.getChildren().add(canvas);
-//
-//        /** Tạo scene. */
-//        scene = new Scene(root);
-//
-//        /** Thêm scene vào stage. */
-//        stage.setScene(scene);
-//
-//        AnimationTimer timer = new AnimationTimer() {
-//            @Override
-//            public void handle(long l) {
-//                render();
-//                update();
-//            }
-//        };
-//        timer.start();
-//    }
-
-    public Stage getStage () {
-        return stage;
-    }
-
-    /** Hàm để lấy 3 số trong file, lần lượt là level - height (số cột) - width (số hàng). File level1_test.txt là tách từ file level ra nhưng chỉ lấy đoạn map. */
-    public static void setProperties() {
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(new File("res/levels/Level1.txt"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        level = scanner.nextInt();
-        HEIGHT = scanner.nextInt();
-        WIDTH = scanner.nextInt();
-        scanner.nextLine();
-
-        mapMatrix = new char[HEIGHT][WIDTH];
-        bombMap = new char[HEIGHT][WIDTH];
-        int i = 0;
-        while(scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            for (int j = 0; j < WIDTH; j++) {
-                mapMatrix[i][j] = line.charAt(j);
-            }
-            i++;
-        }
-
-        for (int j = 0; j < HEIGHT; j++) {
-            for (int k = 0; k < WIDTH; k++) {
-                bombMap[j][k] = ' ';
-            }
-        }
-
-//        EntityMatrix = new Entity[HEIGHT][WIDTH];
-
-        for (int k = 0; k < HEIGHT; k++) {
-            for (int j = 0; j < WIDTH; j++) {
-                bombMap[k][j] = ' ';
-            }
-        }
     }
 
     public static void update() {
@@ -446,25 +346,6 @@ public class GameManagement {
         }
 
 
-//        for (int i = 0; i < activeObjects.size(); i++) {
-//            System.out.println(activeObjects.get(i));
-//        }
-
-//        for (int i = 0; i < HEIGHT; i++) {
-//            for (int j = 0; j < WIDTH; j++) {
-//                System.out.print(bombMap[i][j]);
-//            }
-//            System.out.println();
-//        }
-
-        if (MainCharacter.isDead()) {
-            SequentialTransition seqTransition = new SequentialTransition (
-                    new PauseTransition(Duration.millis(5000)) // wait a second
-            );
-            seqTransition.play();
-        }
-
-
         keyListener();
 
         MainCharacter.update();
@@ -481,7 +362,6 @@ public class GameManagement {
         /**
          * Game over.
          */
-
         if (!MainCharacter.active) {
             gameState = "gameOver";
             return;
@@ -500,9 +380,20 @@ public class GameManagement {
 
         for (int i = 0; i < activeObjects.size(); i++) {
             if (activeObjects.get(i).delete) {
+//                if (activeObjects.get(i) instanceof Brick) {
+//                    mapMatrix[activeObjects.get(i).getXMap()][activeObjects.get(i).getYMap()] = ' ';
+//                }
                 activeObjects.remove(activeObjects.get(i));
             }
         }
+
+//        for (int i = 0; i < HEIGHT; i++) {
+//            for (int j = 0; j < WIDTH; j++) {
+//                System.out.print(mapMatrix[i][j]);
+//            }
+//            System.out.println();
+//        }
+//        System.out.println("END");
     }
 
 
@@ -533,7 +424,6 @@ public class GameManagement {
     /** Hàm nhận event từ Keyboard. */
     public static void keyListener() {
 
-//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
         sceneGameBoard.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -701,6 +591,5 @@ public class GameManagement {
     public static void setGameState(String gameState) {
         GameManagement.gameState = gameState;
     }
-
 
 }

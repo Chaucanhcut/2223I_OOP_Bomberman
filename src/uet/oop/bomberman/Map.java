@@ -28,7 +28,6 @@ public final class Map {
                 String line = in.nextLine();
                 for (int j = 0; j < GameManagement.getWidth(); j++) {
                     map[i][j] = line.charAt(j);
-//                    bombMap[i][j] = ' ';
                     GameManagement.setBombMap(GameManagement.getBombMap(), i, j, '-');
                 }
             }
@@ -58,27 +57,6 @@ public final class Map {
                         activeObjects.add(brickObject);
                         EntityToCheck.add(brickObject);
                         break;
-                    // Portal
-//                    case 'x': {
-//                        GameManagement.mapMatrix[i][j] = '*';
-//                        // Layer 1: Add grass
-//                        Entity grassObject2 = new Grass(j, i, Sprite.grass.getFxImage());
-//                        stillObjects.add(grassObject2);
-//                        // Layer 2: Add portal
-//                        //activeObjects.add(new Portal(j, i, Sprite.portal.getFxImage()));
-//
-////                        Entity portalObject = new Portal(j,i,Sprite.portal.getFxImage());
-////                        stillObjects.add(portalObject);
-//
-//                        portal = new Portal(j,i,Sprite.portal.getFxImage());
-//
-////                        EntityMatrix[i][j] = portalObject;
-//                        // Layer 3: Add brick
-//                        ActiveEntity brickObject2 = new Brick(j, i, Sprite.brick.getFxImage());
-//                        activeObjects.add(brickObject2);
-////                        EntityMatrix[i][j] = brickObject2;
-//                        break;
-//                    }
 
                     case 'x': {
                         mapMatrix[i][j] = '*';
@@ -96,17 +74,16 @@ public final class Map {
                         Entity grassObject3 = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(grassObject3);
                         MainCharacter = new Bomber(j, i, Sprite.player_right.getFxImage(), gc);
-                        // activeObjects.add(MainCharacter);
                         break;
                     }
-                    // Balloon
+
+                    // Balloom
                     case '1':
                         // Layer 1: Add grass
                         stillObjects.add(new Grass(j, i, Sprite.grass.getFxImage()));
                         // Layer 2: Add balloon
                         MovableEntities baloon = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
                         activeObjects.add(baloon);
-//                        EntityMatrix[i][j] = baloon;
                         break;
                     // Oneal
                     case '2':
@@ -115,7 +92,6 @@ public final class Map {
                         // Layer 2: Add oneal
                         MovableEntities oneal = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
                         activeObjects.add(oneal);
-//                        EntityMatrix[i][j] = oneal;
                         break;
 
                     case 'f': {
@@ -162,6 +138,16 @@ public final class Map {
                         break;
                     }
 
+                    case 'F': {
+                        mapMatrix[i][j] = '*';
+                        Entity grassObject2 = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(grassObject2);
+                        ActiveEntity object = new FlamePassPower(j,i,Sprite.powerup_flamepass.getFxImage());
+                        activeObjects.add(object);
+                        ActiveEntity brickObject2 = new Brick(j, i, Sprite.brick.getFxImage());
+                        activeObjects.add(brickObject2);
+                        break;
+                    }
 
                     // Grass
                     default:

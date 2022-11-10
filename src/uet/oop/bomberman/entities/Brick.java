@@ -11,7 +11,6 @@ public class Brick extends ImmovableEntities {
     private int animationTime = 40;
     public Brick(int x, int y, Image img) {
         super(x, y, img);
-//        this.BoundingRect = new Rectangle(this.getXMap(), this.getYMap(), 32, 32);
     }
 
     @Override

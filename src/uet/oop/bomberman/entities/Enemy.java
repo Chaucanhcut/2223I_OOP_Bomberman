@@ -6,14 +6,10 @@ import uet.oop.bomberman.GameManagement;
 import java.awt.*;
 import java.util.Random;
 
-//import static uet.oop.bomberman.GameManagement;
-//import static uet.oop.bomberman.GameManagement.bombMap;
+import static uet.oop.bomberman.GameManagement.getBombMap;
+
 
 public abstract class Enemy extends MovableEntities {
-
-    protected int animate = 0;
-
-    protected final int TIME = 30;
 
     protected int speed;
 
@@ -59,19 +55,14 @@ public abstract class Enemy extends MovableEntities {
      * hàm check xem có thể đi qua ô có index x, y trên mapMatrix không.
      */
     protected boolean canPass(int x, int y) {
-//        if (GameManagement.getEntityMatrix()[x][y] instanceof Wall || GameManagement.getEntityMatrix()[x][y] instanceof Brick ) {
-//            return false;
-//        }
-//        return true;
-
-        if (GameManagement.getMapMatrix()[x][y] == '#' || GameManagement.getMapMatrix()[x][y] == '*') {
+        if (GameManagement.getMapMatrix()[x][y] == '#' || GameManagement.getMapMatrix()[x][y] == '*' || getBombMap()[x][y] == '@') {
             return false;
         }
         return true;
     }
 
     /**
-     * Hàm lựa chọn hướng đi.
+     * Hàm pick hướng đi.
      */
     protected void Move() {
         switch (Direction) {

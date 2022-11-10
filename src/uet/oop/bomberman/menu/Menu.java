@@ -33,7 +33,6 @@ public class Menu {
     public static Scene menu() {
         Pane pane = new Pane();
         pane.setPrefSize(800, 640);
-        //pane.setPrefSize(992, 416);
 
         Group root = new Group();
         sceneMenu = new Scene(root);
@@ -42,7 +41,7 @@ public class Menu {
 
         Image image = new Image(new File("res/textures/menu.png").toURI().toString());
         ImageView background = new ImageView(image);
-        // Tao root container
+        // Tạo root container
         root.getChildren().addAll(background, gamemenu);
 
         sceneMenu.setOnKeyPressed(keyEvent -> {
@@ -75,13 +74,13 @@ public class Menu {
         pane.setPrefSize(800, 608);
 
         Group root = new Group();
-        gameStatus gameOver = new gameStatus();
+        gameStatus victory = new gameStatus();
         sceneVictory = new Scene(root);
 
         Image image = new Image(new File("res/textures/winGame.png").toURI().toString());
         ImageView background = new ImageView(image);
 
-        root.getChildren().addAll(background, gameOver);
+        root.getChildren().addAll(background, victory);
 
         return sceneVictory;
     }
@@ -106,22 +105,6 @@ public class Menu {
             menu1.setTranslateX(offset);
             menu2.setTranslateX(offset);
 
-           // // One player button
-           // menuButton onePlayerButton = new menuButton("ONE PLAYER");
-           // onePlayerButton.setOnMouseClicked(event -> {
-           //     GameManagement.playerCount = 1;
-           //     GameManagement.gameState = "newGame";
-           //     stage.setScene(sceneGameBoard);
-           // });
-//
-           // // Two player button
-           // menuButton twoPlayerButton = new menuButton("TWO PLAYER");
-           // twoPlayerButton.setOnMouseClicked(event -> {
-           //     GameManagement.playerCount = 2;
-           //     GameManagement.gameState = "newGame";
-           //     stage.setScene(sceneGameBoard);
-           // });
-
             // Play button
              menuButton playButton = new menuButton("PLAY");
              playButton.setOnMouseClicked(event -> {
@@ -130,7 +113,7 @@ public class Menu {
                  stage.setScene(sceneGameBoard);
              });
 
-            // tutorial Button
+            // Tutorial Button
             menuButton tutorialButton = new menuButton("TUTORIAL");
             tutorialButton.setOnMouseClicked(event -> {
                 getChildren().add(menu1);
@@ -218,7 +201,6 @@ public class Menu {
             });
 
             // Thêm các button vào menu
-            //menu0.getChildren().addAll(onePlayerButton, twoPlayerButton, tutorialButton, soundButton, exitButton);
             menu0.getChildren().addAll(playButton, tutorialButton, soundButton, exitButton);
             menu1.getChildren().addAll(tutorial, backButton1);
             menu2.getChildren().addAll(mute, unMute, backButton2);

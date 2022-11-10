@@ -30,13 +30,13 @@ public class Balloom extends Enemy {
         if (!active) {
             animationTime--;
             if (animationTime < 0) {
-//                deadSound.play(false, 1);
+                getDeadSound().play(false, 1);
                 delete = true;
             } else {
-                // Animation balloom chết
-//                if (!deadSound.isPlaying()) {
-//                    deadSound.play(true, 1);
-//                }
+//              Balloom chết
+                if (!getDeadSound().isPlaying()) {
+                    getDeadSound().play(true, 1);
+                }
                 if (animationTime > 60) {
                     setImg(Sprite.balloom_dead.getFxImage());
                 } else {
@@ -54,36 +54,6 @@ public class Balloom extends Enemy {
             }
             Move();
         }
-//            animation++;
-//            if (!active) {
-//                animationTime--;
-//                if (animationTime < 0) {
-////                deadSound.play(false, 1);
-//                    delete = true;
-//                } else {
-//                    // Animation ballom chết
-////                if (!deadSound.isPlaying()) {
-////                    deadSound.play(true, 1);
-////                }
-//                    if (animationTime > 60) {
-//                        setImg(Sprite.balloom_dead.getFxImage());
-//                    } else {
-//                        setImg(Sprite.movingSprite(Sprite.mob_dead1, Sprite.mob_dead2, Sprite.mob_dead3, animationTime, 20).getFxImage());
-//                    }
-//                }
-//            } else {
-//                if (getY() % Sprite.SCALED_SIZE == 0 && getX() % Sprite.SCALED_SIZE == 0 && randomTimeInterval <= 0) {
-//                    int xMap = getYMap();
-//                    int yMap = getXMap();
-//                    if (xMap <= 0) xMap = 1;
-//                    if (yMap <= 0) yMap = 1;
-//                    randomDirection = getDirection(xMap, yMap);
-//                    randomTimeInterval = 30;
-//                } else {
-//                    randomTimeInterval--;
-//                }
-//                Move();
-//            }
     }
 
     @Override

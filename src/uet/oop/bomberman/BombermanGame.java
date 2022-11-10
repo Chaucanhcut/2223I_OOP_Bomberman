@@ -34,7 +34,6 @@ public class BombermanGame extends Application {
 
     public static Stage stage;
 
-    //add 2218 311022----------
     public static Scene sceneMenu;
     public static Scene sceneGameBoard;
     public static Scene sceneGameOver;
@@ -43,17 +42,6 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage mainStage) {
 
-        /** Test game management.*/
-        // 2 dong code tiep theo dung de load game board
-
-//        GameManagement game = new GameManagement();
-//        mainStage = game.getStage();
-//
-//        stage = mainStage;
-//        stage.setTitle("Bomberman game");
-
-
-//        add 2246 311022------------ load cac scene: menu, game board, game over, victory
         stage = mainStage;
         stage.setTitle("Bomberman Game");
 

@@ -5,8 +5,6 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.GameManagement;
 import uet.oop.bomberman.graphics.Sprite;
 
-//import static uet.oop.bomberman.GameManagement.bombMap;
-
 public class Bomb extends ImmovableEntities{
     protected int timeAfter = 30;
     public int FlamesPower;
@@ -15,7 +13,6 @@ public class Bomb extends ImmovableEntities{
     private Flame flame;
 
 
-    /**ham bomb co tham so powerFlame de luu do dai cua flame. */
     public Bomb(int x, int y, Image img, int FlamesPower) {
         super(x, y, img);
         this.FlamesPower = FlamesPower;
@@ -27,7 +24,6 @@ public class Bomb extends ImmovableEntities{
     @Override
     public void update() {
         if (timeExplode > 0) { // Chưa nổ thì cho hiện bomb
-//            System.out.println("sap no");
             timeExplode--;
             setImg(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExplode, 100).getFxImage());
         } else { // Nổ rồi thì cho hiện flame
@@ -44,7 +40,7 @@ public class Bomb extends ImmovableEntities{
                 active = false;
                 GameManagement.getBombMap()[getYMap()][getXMap()] = ' ';
             }
-            // Animation bom nổ
+            // bom nổ
             setImg(Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, timeAfter, 100).getFxImage());
             GameManagement.getBombSound().play(false, 0);
         }

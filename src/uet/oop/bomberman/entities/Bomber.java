@@ -25,17 +25,17 @@ import static uet.oop.bomberman.graphics.Sprite.movingSprite;
 
 public class Bomber extends MovableEntities {
 
-    public int bombCount; // so luong bomb
+    public int bombCount; // số lượng bomb
 
     private boolean bombPass = false;
 
     private boolean wallPass = false;
 
+    private boolean flamePass = false;
+
     public int animateTime = 90;
 
     private int bombTime = 150;
-
-    private boolean isDead = false;
 
     private int speed;
 
@@ -49,8 +49,11 @@ public class Bomber extends MovableEntities {
         this.gc = gc;
         bombCount = 1;
         bombPass = false;
+        flamePass = false;
+        wallPass = false;
         active = true;
         speed = 1;
+        powerFlames = 1;
     }
 
 
@@ -67,31 +70,10 @@ public class Bomber extends MovableEntities {
         int count = bombCount;
         if (bombTime <= 0) count = 1;
         int newY = (int) (this.getBoundingRect().getY() / 32);
-//        if (mapMatrix[newY][getXMap()] != '*' && mapMatrix[newY][getXMap()] != '#') {
-//            bombMap[newY][getXMap()] = '@'; // vị trí đặt bomb
-//            // BombermanGame.bombSound.play(true, 0);
-//            count--;
-//            activeObjects.add(new Bomb(getXMap(), newY, Sprite.bomb.getFxImage(), powerFlames));
-//        } else return;
-//        int[] dx = {1, -1, 0, 0};
-//        int[] dy = {0, 0, 1, -1};
-//        int xUnit, yUnit;
-//        for (int i = 0; i < 4; i++) {
-//            if (count == 0) break;
-//            xUnit = getXMap() + dx[i];
-//            yUnit = newY + dy[i];
-//            if (mapMatrix[yUnit][xUnit] != '*' && mapMatrix[yUnit][xUnit] != '#') {
-//                bombMap[yUnit][xUnit] = '@'; // vị trí đặt bomb
-//                count--;
-//                System.out.println(bombCount);
-//                activeObjects.add(new Bomb(getXMap(), (int) (this.getBoundingRect().getY() / 32), Sprite.bomb.getFxImage(), powerFlames));
-//            }
-//        }
 
         if (GameManagement.getMapMatrix()[newY][getXMap()] != '*' && GameManagement.getMapMatrix()[newY][getXMap()] != '#') {
             GameManagement.getBombMap()[newY][getXMap()] = '@'; // vị trí đặt bomb
-//            GameManagement.getBombMap()[getYMap()][getXMap()] = '@'; // vị trí đặt bomb
-//             GameManagement.bombSound.play(true, 0);
+             GameManagement.getBombSound().play(true, 0);
             count--;
             GameManagement.activeObjects.add(new Bomb(getXMap(), newY, Sprite.bomb.getFxImage(), powerFlames));
         } else return;
@@ -109,7 +91,6 @@ public class Bomber extends MovableEntities {
                 activeObjects.add(new Bomb(getXMap(), (int) (this.getBoundingRect().getY() / 32), Sprite.bomb.getFxImage(), powerFlames));
             }
         }
-
         bombTime--;
     }
 
@@ -140,44 +121,98 @@ public class Bomber extends MovableEntities {
           Sprite sprite2 = Sprite.player_down_2;
           this.img = movingSprite(spriteNormal, sprite1, sprite2, animate, TIME).getFxImage();
       }
-      gc.drawImage(img, x,y);
-    }
 
-    public boolean isDead() {
-        return isDead;
+      gc.drawImage(img, x,y);
+
+        System.out.println(getXMap() + "-" + getYMap());
+        System.out.println(getX() + "---" + getY());
+
     }
 
     @Override
     public void update() {
 
-        if (GameManagement.isLeftPressed() && canMove(getX() - 5, getY())) {
-            x -= speed;
-        }
-        else if (GameManagement.isRightPressed() && canMove(getX() + 20, getY() + 5)) {
-            x += speed;
-        }
-        else if (GameManagement.isSpacePressed()) {
-            Bombing();
-            setBombCount(0);
-        }
-        else if (GameManagement.isUpPressed() && canMove(getX() + 20, getY() - 3)) {
-            y -= speed;
-        }
-        else if (GameManagement.isDownPressed() && canMove(getX() + 6, getY() + 29)) {
-            y += speed;
+        int RX = getX() % 32;
+        int RY = getY() % 32;
+
+        if (GameManagement.isLeftPressed()) {
+            if (canMove(getX() - 6, getY()) && canMove(getX() - 6, getY() + 32)) {
+                x -= speed;
+            }
+            else {
+                if (RY <= 4 && canMove(getX() - 6, getY() - RY)) {
+                    x -= speed;
+                }
+                else if (RY >= 28 && canMove(getX() - 6, getY() + RY)) {
+                    x -= speed;
+
+                }
+            }
         }
 
+        else if (GameManagement.isRightPressed()) {
+            if (canMove(getX() + 28, getY()) && canMove(getX() + 28, getY() + 32)) {
+                x += speed;
+
+            }
+            else {
+                if (RY <= 5 && canMove(getX() + 28, getY() - RY)) {
+                    x += speed;
+
+                }
+                else if (RY >= 27 && canMove(getX()+ 28, getY() + RY)) {
+                    x += speed;
+                }
+            }
+        }
+
+        else if (GameManagement.isUpPressed()) {
+            if (canMove(getX(), getY() - 5) && canMove(getX() + 32, getY() - 5)) {
+                y -= speed;
+            }
+            else {
+                int R = getX() % 32;
+                if (R <= 6 && canMove(getX() - R, getY() - 5)) {
+                    y -= speed;
+
+                }
+                else if (R >= 26 && canMove(getX() + R, getY() - 5)) {
+                    y -= speed;
+
+                }
+            }
+        }
+
+        else if (GameManagement.isDownPressed()) {
+            if (canMove(getX(), getY() + 32) && (canMove(getX() + 32, getY() + 32))) {
+                y += speed;
+            }
+            else {
+                int R = getX() % 32;
+                if (R <= 6 && canMove(getX() - R, getY() + 32)) {
+                    y += speed;
+                }
+                else if (R >= 26 && canMove(getX() + R, getY() + 32)) {
+                    y += speed;
+                }
+            }
+        }
+
+        else if (GameManagement.isSpacePressed()) {
+            Bombing();
+            bombCount--;
+        }
 
         bombTime--;
         if (!active) {
             animateTime--;
             if (animateTime < 0) {
                 delete = true;
-//                deadSound.play(false, 0);
+                GameManagement.getDeadSound().play(false, 0);
             } else {
-//                if (!deadSound.isPlaying()) {
-//                    deadSound.play(true, 0);
-//                }
+                if (!GameManagement.getDeadSound().isPlaying()) {
+                    GameManagement.getDeadSound().play(true, 0);
+                }
                 setImg(Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, animate, 30).getFxImage());
             }
         }
@@ -186,11 +221,10 @@ public class Bomber extends MovableEntities {
     public void checkVictory(Portal p) {
         if (this.getBoundingRect().intersects(p.getBoundingRect()) && CheckEnemyKilled()) {
             portalCheck = true;
-            System.out.println("YES");
         }
     }
 
-//    @Override
+    @Override
     public void collide(ActiveEntity entity) {
         // Nếu bomber hoặc entity chết thì ko làm gì
         if (entity.delete || delete || entity instanceof Bomber) {
@@ -206,16 +240,24 @@ public class Bomber extends MovableEntities {
                 active = false;
                 return;
             }
+
+            if (entity instanceof Flame) {
+                if (flamePass) {
+                    return;
+                }
+                else active = false;
+            }
+
             if (entity instanceof Bomb) {
                 Bomb bomb = (Bomb) entity;
-                if (bomb.timeExplode <= 0 && !bombPass) {
+                if (bomb.timeExplode <= 0 && !bombPass && !flamePass) {
                     active = false;
                     return;
                 }
             }
 
-            if (entity instanceof PowerItem) {
-//                powerUpSound.play(true, 0);
+            if (entity instanceof PowerItem)  {
+                getPowerUpSound().play(true, 0);
                 PowerItem item = (PowerItem) entity;
                 item.active = true;
                 item.delete = true;
@@ -226,11 +268,21 @@ public class Bomber extends MovableEntities {
 
     @Override
     public boolean canMove(int x, int y) {
+
+        int xUnit = x / Sprite.SCALED_SIZE;
+        int yUnit = y / Sprite.SCALED_SIZE;
+
+        if (xUnit == 0 || xUnit == getWIDTH()-1){
+            return false;
+        }
+        if (yUnit == 0 || yUnit == getHEIGHT()-1) {
+            return false;
+        }
+
         if (wallPass) {
             return true;
         }
-        int xUnit = x / Sprite.SCALED_SIZE;
-        int yUnit = y / Sprite.SCALED_SIZE;
+
         return mapMatrix[yUnit][xUnit] != '*' && mapMatrix[yUnit][xUnit] != '#';
     }
 
@@ -239,21 +291,26 @@ public class Bomber extends MovableEntities {
             Flame.setPowerFlames(2);
         }
 
-        // Tăng tốc độ x2
-        if (power instanceof BombPassPower) {
-            bombPass = true;
-        }
-
-
-        // Xuyen tuong
+        // Đi xuyên tường
         if (power instanceof WallPassPower) {
             wallPass = true;
         }
 
+        // Tăng tốc độ x2
         if (power instanceof SpeedPower) {
             speed = 2;
         }
 
+        if (power instanceof BombPassPower) {
+            bombPass = true;
+        }
+
+        if (power instanceof FlamePassPower) {
+            flamePass = true;
+        }
     }
 
+    public boolean getFlamePass() {
+        return flamePass;
+    }
 }

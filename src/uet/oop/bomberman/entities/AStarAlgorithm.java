@@ -4,23 +4,15 @@ import uet.oop.bomberman.GameManagement;
 
 import java.util.*;
 
-//import static uet.oop.bomberman.GameManagement.mapMatrix;
-
 public class AStarAlgorithm {
-    private Node[][] searchArea; // mang chua cac Node theo khu vuc tim kiem (map dau vao)
-    private PriorityQueue<Node> openList; // ds dong theo do uu tien f nho
-    private Set<Node> closedSet; // luu cac Node da truy cap
-    private Node initialNode; // Node bat dau
-    private Node finalNode;  // Node ket thuc
+    private Node[][] searchArea;
+    private PriorityQueue<Node> openList;
+    private Set<Node> closedSet;
+    private Node initialNode;
+    private Node finalNode;
 
     /**
-     * ham khoi tao theo
-     *
-     * @param Map        mang dau vao theo tung map
-     * @param RowInitial hang cua diem bat dau
-     * @param ColInitial cot cua diem bat dau
-     * @param RowFinal   hang cua diem ket thuc
-     * @param ColFinal   cot cua diem ket thuc
+     * hàm khởi tạo có tham số
      */
     public AStarAlgorithm(char[][] Map, int RowInitial, int ColInitial, int RowFinal, int ColFinal) {
         this.initialNode = new Node(RowInitial, ColInitial);
@@ -36,48 +28,42 @@ public class AStarAlgorithm {
      * Trong do: row, col, h, isBlocked la nhung cai tim luon duoc
      * g, f, parent la nhung cai update trong qua trinh tim kiem
      */
+
+    /**
+     * update các Node trong searchArea
+     * với row, col, h, isBlocked tìm luôn được
+     * g, f, parent cần update trong quá trình tìm
+     */
     public void setNodes(char[][] Map) {
         for (int i = 0; i < searchArea.length; i++) {
             for (int j = 0; j < searchArea[0].length; j++) {
                 searchArea[i][j] = new Node(i, j);
                 searchArea[i][j].calculateH(finalNode);
                 searchArea[i][j].setBlocked(GameManagement.getMapMatrix()[i][j] == '#' || GameManagement.getMapMatrix()[i][j] == '*' || GameManagement.getBombMap()[i][j] == '@');
-//                searchArea[i][j].setBlocked(GameManagement.getMapMatrix()[i][j] == '#' || GameManagement.getMapMatrix()[i][j] == '*');
             }
         }
     }
 
     /**
-     * Tim kiem A*
-     *
-     * @return danh sach duong di, neu khong tim duoc tra ve null
+     * A*
      */
     public List<Node> aStarSearch() {
         openList.add(initialNode);
         while (!isEmpty(openList)) {
-            Node currentNode = openList.poll(); // tra ve Node co do uu tien cao nhat va xoa khoi hang doi
-            /**
-             * da tung truy cap currentNode (tu do cap nhat cac Node xung quanh roi)
-             * ma theo do uu tien nen currentNode sau khong the co do uu tien hon nen khong can xet no nua
-             */
+            Node currentNode = openList.poll();
             if (closedSet.contains(currentNode)) {
                 continue;
             }
-            closedSet.add(currentNode); // them vao danh sach da truy cap
+            closedSet.add(currentNode);
             if (isFinalNode(currentNode)) {
                 return getPath(currentNode);
             } else {
-                updateClosedNode(currentNode); // thuc hien update cac Node xung quanh
+                updateClosedNode(currentNode);
             }
         }
         return null;
     }
 
-    /**
-     * truy vet
-     *
-     * @param currentNode chinh la finalNode
-     */
     public List<Node> getPath(Node currentNode) {
         List<Node> path = new ArrayList<>();
         while (currentNode != null) {
@@ -88,17 +74,17 @@ public class AStarAlgorithm {
     }
 
     public void updateClosedNode(Node currentNode) {
-        int[] X = {0, 0, -1, 1}; // X[i] va Y[i] tuong ung voi 4 huong xung quanh currentNode
+        int[] X = {0, 0, -1, 1}; // X[i] va Y[i] tương ứng 4 phía xung quanh
         int[] Y = {-1, 1, 0, 0};
         int rows = searchArea.length;
         int cols = searchArea[0].length;
         for (int i = 0; i < X.length; i++) {
             int RowClosedNode = currentNode.getRow() + X[i];
             int ColClosedNode = currentNode.getCol() + Y[i];
-            if (RowClosedNode >= 0 && RowClosedNode < rows          // khi ClosedNode nam trong vung hop le
+            if (RowClosedNode >= 0 && RowClosedNode < rows
                     && ColClosedNode >= 0 && ColClosedNode < cols) {
                 Node ClosedNode = searchArea[RowClosedNode][ColClosedNode];
-                if (!ClosedNode.isBlocked() && ClosedNode.checkIsChanged(currentNode)) { // co the di vao va co su thay doi
+                if (!ClosedNode.isBlocked() && ClosedNode.checkIsChanged(currentNode)) {
                     openList.add(ClosedNode);
                 }
             }
